@@ -15,9 +15,4 @@ def longest_increasing_subsequence_from(numbers: list[int]) -> int:
                 if sequence > longest_sequence:
                     longest_sequence = sequence
             
-            compared_index += 1
-            
-        fixed_index += 1
-    
-    
     return longest_sequence
