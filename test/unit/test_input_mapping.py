@@ -2,13 +2,13 @@ from input_mapping import DEFAULT_DELIMITER, DEFAULT_HEADER_INCLUDED, file_locat
 
 
 def test_file_location_is_valid_when_valid_then_returns_true():
-    file_location = 'test/unit/test_input_mapping.py'
+    file_location = 'test/unit/test_file.csv'
     is_valid = file_location_is_valid(file_location)
     assert is_valid is True
     
     
 def test_file_location_is_valid_when_invalid_then_returns_false():
-    file_location = 'test/unit/not_a_thing.py'
+    file_location = 'test/unit/not_a_thing.csv'
     is_valid = file_location_is_valid(file_location)
     assert is_valid is False
 
