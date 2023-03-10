@@ -84,3 +84,18 @@ def test_paths_from_root_summing_to_when_multiple_paths_exist_then_returns_paths
     assert paths[0] == expected_first_path
     assert paths[1] == expected_second_path
     
+
+@pytest.mark.parametrize(
+    "left,right,expected",
+    [
+        pytest.param(20, 9, 1),
+        pytest.param(6, 7, 4),
+        pytest.param(6, 101, None),
+        pytest.param(101, 7, None),
+    ]
+)
+def test_lca_when_both_nodes_exist_then_returns_lca(left, right, expected, tree_a):
+    actual = tree_a.lca(left, right)
+    
+    assert actual == expected
+    
