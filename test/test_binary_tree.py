@@ -62,6 +62,20 @@ def tree_b():
     root.left = node_28
     root.right = node_13
     return BinaryTree(root=root)
+
+
+#              4
+#       2            5
+#    1    3       
+@pytest.fixture
+def binary_search_tree_a():
+    node_3 = Node(value=3, left=None, right=None)
+    node_1 = Node(value=1, left=None, right=None)
+    node_5 = Node(value=5, left=None, right=None)
+    node_2 = Node(value=2, left=node_1, right=node_3)
+    root = Node(value=4, left=node_2, right=node_5)
+    
+    return BinaryTree(root=root)
     
 
 def test_paths_from_root_summing_to_when_single_path_exists_then_returns_path(tree_a):
@@ -99,3 +113,11 @@ def test_lca_when_both_nodes_exist_then_returns_lca(left, right, expected, tree_
     
     assert actual == expected
     
+    
+def test_is_bst_when_bst_then_returns_true(binary_search_tree_a):
+    assert binary_search_tree_a.is_bst() is True
+    
+
+def test_is_bst_when_not_bst_then_returns_false(tree_a, tree_b):
+    assert tree_a.is_bst() is False
+    assert tree_b.is_bst() is False

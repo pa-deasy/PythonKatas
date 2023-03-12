@@ -33,7 +33,28 @@ class BinaryTree:
                 queue.append(current_node.right)
         
         return lca if left_found and right_found else None
-
+    
+    def is_bst(self) -> bool:
+        is_bst = True
+        queue = [self.root]
+        
+        while queue and is_bst:
+            current_node = queue.pop(0)
+            left  = current_node.left
+            right = current_node.right
+            
+            if left and left.value > current_node.value:
+                is_bst = False
+            if right and right.value < current_node.value:
+                is_bst = False
+                
+            if left:
+                queue.append(left)
+            if right:
+                queue.append(right)
+        
+        return is_bst
+ 
 
 def _sums_from(node: Node, current_path: list[int], target: int) -> list[list[int]]:
     successful_paths = []
