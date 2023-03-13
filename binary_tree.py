@@ -54,6 +54,33 @@ class BinaryTree:
                 queue.append(right)
         
         return is_bst
+    
+    def zig_zag_order(self) -> list[int]:
+        zig_zag_order = []
+        queue = [self.root]
+        left_to_right = True
+        
+        while queue:
+            layer: list[int] = []
+            next_nodes: list[Node] = []
+            
+            while queue:
+                node = queue.pop(0)
+                layer.append(node.value)
+                if node.left:
+                    next_nodes.append(node.left)
+                if node.right:
+                    next_nodes.append(node.right)
+            
+            if left_to_right is False:
+                layer.reverse()
+                
+            zig_zag_order += layer
+            queue += next_nodes
+            left_to_right = False if left_to_right else True
+    
+        return zig_zag_order
+
  
 
 def _sums_from(node: Node, current_path: list[int], target: int) -> list[list[int]]:

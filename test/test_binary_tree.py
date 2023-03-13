@@ -121,3 +121,18 @@ def test_is_bst_when_bst_then_returns_true(binary_search_tree_a):
 def test_is_bst_when_not_bst_then_returns_false(tree_a, tree_b):
     assert tree_a.is_bst() is False
     assert tree_b.is_bst() is False
+    
+
+def test_zig_zag_order_when_retrieved_then_order_as_expected(tree_a):
+    zig_zag_order = tree_a.zig_zag_order()
+    
+    assert zig_zag_order[0] == 1
+    assert zig_zag_order[1] == 3
+    assert zig_zag_order[2] == 20
+    assert zig_zag_order[3] == 4
+    assert zig_zag_order[4] == 15
+    assert zig_zag_order[5] == 9
+    assert zig_zag_order[6] == 8
+    assert zig_zag_order[7] == 7
+    assert zig_zag_order[8] == 6
+    
