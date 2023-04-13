@@ -17,8 +17,3 @@ def non_optimal_rotate_array(array: list[Any], rotations: int, indexes: list[int
         return_array.append(array[index])
         
     return return_array
-
-
-
-
-# pytest.param([3, 4, 5], 2, [1, 2], [5, 3])
