@@ -1,4 +1,5 @@
-from big_o.big_o_examples import all_fib, all_fib_optomized, factorial, fib, foo_sum_product, is_prime, permutation, powers_of_2, print_pairs, print_unordered_pairs, print_unordered_pairs_by_4, print_unordered_pairs_less_than, reverse, sum_balanced_nodes
+import pytest
+from big_o.big_o_examples import all_fib, all_fib_optomized, copy_numbers, div, factorial, fib, foo_sum_product, intersection, is_prime, mod, permutation, power, powers_of_2, print_pairs, print_unordered_pairs, print_unordered_pairs_by_4, print_unordered_pairs_less_than, product, reverse, sorted_strings, sqrt, sqrt_linear, sum_balanced_nodes, sum_digits
 from big_o.node import Node
 
 
@@ -119,5 +120,61 @@ def test_powers_of_2_when_calculated_then_returns_expected_numbers():
     expected = {1, 2, 4}
     
     actual = powers_of_2(4)
+    
+    assert actual == expected
+    
+
+def test_product_when_calculated_then_result_as_expected():
+    assert product(2, 3) == 6
+    
+
+def test_power_when_calculated_then_result_as_expected():
+    assert power(2, 3) == 8
+    
+    
+def test_mod_when_modded_then_result_as_expected():
+    assert mod(33, 10) == 3
+    
+
+def test_div_when_divided_then_result_as_expected():
+    assert div(30, 10) == 3
+    
+    
+def test_sqrt_when_calculated_then_sqrt_as_expected():
+    assert sqrt(25) == 5
+    
+
+def test_sqrt_linear_when_calculated_then_sqrt_as_expected():
+    assert sqrt_linear(25) == 5
+    
+
+def test_copy_numbers_when_copied_then_new_numbers_as_expected():
+    numbers = [2, 4, 33, 25]
+    
+    copied = copy_numbers(numbers)
+    
+    assert copied == numbers
+    
+
+def test_sum_digits_when_summed_then_sum_as_expected():
+    assert sum_digits(24) == 6
+    assert sum_digits(732) == 12
+    
+
+pytest.mark.skip(reason='No idea what this is supposed to really do')
+def test_sorted_strings_when_sorted_then_as_expected():
+    expected = []
+    
+    actual = sorted_strings(4)
+    
+    assert actual == expected
+    
+    
+def test_intersection_when_obtained_then_matches_expected_intersection():
+    expected = [5, 9]
+    a = [10, 5, 1, 9, 7]
+    b = [3, 2, 4, 6, 8, 5, 11, 9]
+    
+    actual = intersection(a, b)
     
     assert actual == expected
