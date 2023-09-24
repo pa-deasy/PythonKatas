@@ -1,3 +1,78 @@
+from typing import Dict
+
+# 1.1 - Is Unique: Implement an algorithm to determine if a string has all unique characters.
+# What if you cannot use additional data structures
+def is_unique(word: str) -> bool:
+    return len(set(word)) == len(word)
+
+
+def is_unique_no_datastructures(word: str) -> bool:
+    chars = list(word)
+    chars.sort()
+    for left_index in range(len(chars) - 1):
+        right_index = left_index + 1
+        if chars[left_index] == chars[right_index]:
+            return False
+    return True
+
+
+def is_unique_no_datastructures_other(word: str) -> bool:
+    alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    ord_offset = 97
+
+    for index in range(len(word)):
+        char = word[index]
+        alphabet_pos = ord(char) - ord_offset
+        if alphabet[alphabet_pos] != char:
+            return False
+        else:
+            alphabet = alphabet[:alphabet_pos] + '!' + alphabet[alphabet_pos + 1:]
+    return True
+
+
+# 1.2 - Check Permutation: Given two strings, write a method to decide if one is a permutation of the other.
+def is_permutation(word: str, potential_permutation: str) -> bool:
+    # permutations = _get_permutations(word)
+    # return True if potential_permutation in permutations else False
+
+    word_char_count = _to_char_count(word)
+    potential_char_count = _to_char_count(potential_permutation)
+
+    for key, value in word_char_count.items():
+        potential_char_count_value = potential_char_count.get(key)
+
+        if not potential_char_count_value or potential_char_count_value != value:
+            return False
+    return True
+
+
+def _to_char_count(word: str) -> Dict[str, int]:
+    char_counts: Dict[str, int] = {}
+    for char in list(word):
+        char_count = char_counts.get(char)
+        char_counts[char] = char_count + 1 if char_count else 1
+    return char_counts
+
+
+def _get_permutations(word: str) -> list[str]:
+    return _generate_permutations(word[1:], word[:1], [])
+
+
+def _generate_permutations(remaining: str, prefix: str, permutations: list[str]) -> list[str]:
+    if not remaining:
+        permutations.append(prefix)
+        return permutations
+
+    remaining_post_pop = remaining[1:]
+    popped_char = remaining[:1]
+
+    for index in range(len(prefix) + 1):
+        new_prefix = prefix[:index] + popped_char + prefix[index:]
+        _generate_permutations(remaining_post_pop, new_prefix, permutations)
+
+    return permutations
+
+
 # 1.3 URLify: Write a method to replace all spaces in a string with '%20'. 
 def urlify(chars: list[str], true_length: int) -> str:
     space_count = _count_in(chars, 0, true_length, ' ')
