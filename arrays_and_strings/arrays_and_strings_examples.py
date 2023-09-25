@@ -100,3 +100,38 @@ def _count_in(chars: list[str], start: int, end: int, target: str) -> int:
         if char == target:
             count += 1
     return count
+
+
+# 1.4 - Palindrome Permutation: Given a string, write a function to check if it is a permutation of a palindrome. 
+# A palindrome is a word or phrase which is the same forwards and backwards. A permutation is an arrangement of letters.
+# The palindrome does not need to be limited to dictionary words. Ignore casing and non-letter characters.
+def is_a_palindrome(sentence: str) -> bool:
+    char_counts = _generate_char_counts(sentence)
+    
+    odd_count = 0
+    for count in char_counts.values():
+        if odd_count > 1:
+            return False
+        if count % 2 == 1:
+            odd_count += 1
+        
+    return True
+
+
+def _generate_char_counts(sentence: str) -> Dict[str, int]:
+    char_counts: Dict[str, int] = {}
+    for char in list(sentence):
+        lower_char = char.lower()
+        if not _is_a_lower_character(lower_char):
+            continue
+        count = char_counts.get(lower_char)
+        char_counts[lower_char] = count + 1 if count else 1
+    
+    return char_counts
+        
+def _is_a_lower_character(candidate: str) -> bool:
+    a_val = ord('a')
+    z_val = ord('z')
+    candidate_val = ord(candidate)
+    
+    return a_val <= candidate_val and candidate_val <= z_val

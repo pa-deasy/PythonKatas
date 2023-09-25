@@ -1,4 +1,5 @@
-from arrays_and_strings.arrays_and_strings_examples import is_permutation, is_unique, is_unique_no_datastructures, is_unique_no_datastructures_other, urlify
+from arrays_and_strings.arrays_and_strings_examples import is_a_palindrome, is_permutation, is_unique, is_unique_no_datastructures, is_unique_no_datastructures_other, urlify
+import pytest
 
 
 def test_is_unique_when_unique_then_returns_true():
@@ -36,5 +37,19 @@ def test_urlify_when_converted_then_matches_expected():
     expected = ['M', 'r', '%', '2', '0', 'J', 'o', 'h', 'n', '%', '2', '0', 'S', 'm', 'i', 't', 'h']
     
     actual = urlify(input, true_length)
+    
+    assert actual == expected
+    
+
+@pytest.mark.parametrize(
+    "sentence, expected",
+    [
+        pytest.param('Tact Cao', True),
+        pytest.param('Ci-v ic', True),
+        pytest.param('gikgs', False)
+    ]
+)
+def test_is_a_palindrome_when_word_checked_then_result_is_as_expected(sentence, expected):
+    actual = is_a_palindrome(sentence)
     
     assert actual == expected
