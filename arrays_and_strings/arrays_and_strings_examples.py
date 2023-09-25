@@ -135,3 +135,49 @@ def _is_a_lower_character(candidate: str) -> bool:
     candidate_val = ord(candidate)
     
     return a_val <= candidate_val and candidate_val <= z_val
+
+
+# 1.5 - One Away: There are three types of edits that can be performed on strings, insert a character, remove a character, or replace a character.
+# Given two strings, write a function to check if they are one edit(or zero edits) away.
+def are_one_away(first: str, second: str) -> bool:
+    if len(first) == len(second):
+        return _check_one_edit_replace(first, second)
+    
+    elif len(first) + 1 == len(second):
+        return _check_one_edit_insert(first, second)
+    
+    elif len(first) == len(second) + 1:
+        return _check_one_edit_insert(second, first)
+    
+    else:
+        return False
+    
+    
+def _check_one_edit_replace(first: str, second: str) -> bool:
+    edit_count = 0
+    for index in range(len(first)):
+        if edit_count > 1:
+            return False
+        if first[index:index+1] != second[index:index+1]:
+            edit_count += 1
+        
+    return True
+
+
+def _check_one_edit_insert(shorter: str, longer: str) -> bool:
+    edit_count = 0
+    shorter_index = 0
+    longer_index = 0
+    
+    while shorter_index < len(shorter) and longer_index < len(longer):
+        if edit_count > 1:
+            return False
+        elif shorter[shorter_index:shorter_index+1] != longer[longer_index:longer_index+1]:
+            longer_index += 1
+            edit_count += 1
+        else:
+            shorter_index += 1
+            longer_index += 1
+            
+    return True
+            
