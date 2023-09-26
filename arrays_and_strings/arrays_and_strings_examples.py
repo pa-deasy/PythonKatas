@@ -181,3 +181,26 @@ def _check_one_edit_insert(shorter: str, longer: str) -> bool:
             
     return True
             
+
+# 1.6 - String Compression: Implement a method to perform basic string compression using the counts of repeated characters.
+# For example, the string aabcccccaaa would become a2b1c5a3. If the compressed string would not become smaller than the original string, your method should return the original.
+# You can assume the string has only uppercase and lowercase letters(a - z).
+def compress(input: str) -> str:
+    output_chars: list[str] = []
+    input_chars = list(input)
+    
+    current_char = input_chars.pop(0)
+    current_char_count = 1
+    while input_chars:
+        next_char = input_chars.pop(0)
+        if current_char == next_char:
+            current_char_count += 1
+        else:
+            output_chars += [current_char, str(current_char_count)]
+            current_char = next_char
+            current_char_count = 1
+    
+    output_chars += [current_char, str(current_char_count)]
+    output = str.join('', output_chars)
+    
+    return output if len(output) < len(input) else input

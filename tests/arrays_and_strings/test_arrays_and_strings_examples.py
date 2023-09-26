@@ -1,4 +1,4 @@
-from arrays_and_strings.arrays_and_strings_examples import are_one_away, is_a_palindrome, is_permutation, is_unique, is_unique_no_datastructures, is_unique_no_datastructures_other, urlify
+from arrays_and_strings.arrays_and_strings_examples import are_one_away, compress, is_a_palindrome, is_permutation, is_unique, is_unique_no_datastructures, is_unique_no_datastructures_other, urlify
 import pytest
 
 
@@ -69,5 +69,19 @@ def test_is_a_palindrome_when_sentence_checked_then_result_is_as_expected(senten
 )
 def test_are_one_away_when_words_compared_then_returns_expected_result(target, candidate, expected):
     actual = are_one_away(target, candidate)
+    
+    assert actual == expected
+    
+
+@pytest.mark.parametrize(
+    "input,expected",
+    [
+        pytest.param('aabcccccaaa', 'a2b1c5a3'),
+        pytest.param('aabccccca', 'a2b1c5a1'),
+        pytest.param('abcde', 'abcde')
+    ]
+)
+def test_compress_when_input_is_compressed_then_output_is_as_expected(input, expected):
+    actual = compress(input)
     
     assert actual == expected
