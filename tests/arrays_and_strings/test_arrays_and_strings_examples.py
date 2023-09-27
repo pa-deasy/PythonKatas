@@ -1,4 +1,4 @@
-from arrays_and_strings.arrays_and_strings_examples import are_one_away, compress, is_a_palindrome, is_permutation, is_unique, is_unique_no_datastructures, is_unique_no_datastructures_other, urlify
+from arrays_and_strings.arrays_and_strings_examples import are_one_away, compress, is_a_palindrome, is_permutation, is_unique, is_unique_no_datastructures, is_unique_no_datastructures_other, rotate, urlify
 import pytest
 
 
@@ -83,5 +83,43 @@ def test_are_one_away_when_words_compared_then_returns_expected_result(target, c
 )
 def test_compress_when_input_is_compressed_then_output_is_as_expected(input, expected):
     actual = compress(input)
+    
+    assert actual == expected
+    
+    
+def test_rotate_when_given_3_x_3_matrix_rotated_then_result_is_as_expected():
+    matrix = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9]
+    ]
+    
+    expected = [
+        [7, 4, 1],
+        [8, 5, 2],
+        [9, 6, 3]
+    ]
+    
+    actual = rotate(matrix)
+    
+    assert actual == expected
+    
+
+def test_rotate_when_given_4_x_4_matrix_rotated_then_result_is_as_expected():
+    matrix = [
+        [1, 2, 3, 4],
+        [5, 6, 7, 8],
+        [9, 10, 11, 12],
+        [13, 14, 15, 16],
+    ]
+    
+    expected = [
+        [13, 9, 5, 1],
+        [14, 10, 6, 2],
+        [15, 11, 7, 3],
+        [16, 12, 8, 4]
+    ]
+    
+    actual = rotate(matrix)
     
     assert actual == expected

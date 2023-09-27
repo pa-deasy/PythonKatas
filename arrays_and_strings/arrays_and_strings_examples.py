@@ -204,3 +204,31 @@ def compress(input: str) -> str:
     output = str.join('', output_chars)
     
     return output if len(output) < len(input) else input
+
+
+# 1.7 - Rotate Matrix: Given an image represented by an N x N matrix, where each pixel in the image is represented by an interger, write a method to rotate the image by 90 degrees.
+# Can you do this in place?
+def rotate(matrix: list[list[int]]) -> list[list[int]]:
+    n = len(matrix)
+    max_layer = round(n/2)
+    
+    for layer in range(0, max_layer):
+        first = layer
+        last = n - 1 - layer
+        for index in range(first, last):
+            offset = index - first
+            top = matrix[first][index]
+            
+            # left -> top
+            matrix[first][index] = matrix[last - offset][first]
+            
+            # bottom -> left
+            matrix[last - offset][first] = matrix[last][last - offset]
+            
+            # right -> bottom
+            matrix[last][last - offset] = matrix[index][last]
+            
+            # top -> right
+            matrix[index][last] = top
+            
+    return matrix
