@@ -1,4 +1,4 @@
-from arrays_and_strings.arrays_and_strings_examples import are_one_away, compress, is_a_palindrome, is_permutation, is_unique, is_unique_no_datastructures, is_unique_no_datastructures_other, rotate, urlify
+from arrays_and_strings.arrays_and_strings_examples import are_one_away, compress, is_a_palindrome, is_permutation, is_unique, is_unique_no_datastructures, is_unique_no_datastructures_other, propagate_zeros, rotate, urlify
 import pytest
 
 
@@ -121,5 +121,25 @@ def test_rotate_when_given_4_x_4_matrix_rotated_then_result_is_as_expected():
     ]
     
     actual = rotate(matrix)
+    
+    assert actual == expected
+    
+    
+def test_propegate_zeros_when_zeros_exist_then_rows_and_columns_are_updated():
+    matrix = [
+        [1, 2, 0, 4],
+        [5, 6, 7, 8],
+        [9, 0, 11, 12],
+        [13, 14, 15, 16],
+    ]
+    
+    expected = [
+        [0, 0, 0, 0],
+        [5, 0, 0, 8],
+        [0, 0, 0, 0],
+        [13, 0, 0, 16],
+    ]
+    
+    actual = propagate_zeros(matrix)
     
     assert actual == expected

@@ -232,3 +232,39 @@ def rotate(matrix: list[list[int]]) -> list[list[int]]:
             matrix[index][last] = top
             
     return matrix
+
+
+# 1.8 - Zero Matrix: Write an algorithm such that if an element in an M x N matrix is 0, it's entire row and column are set to 0.
+def propagate_zeros(matrix: list[list[int]]) -> list[list[int]]:
+    if not(matrix):
+        return matrix
+    
+    non_zero_column_indexes = set(range(len(matrix[0])))
+    zero_column_indexes = set()
+    
+    for row_index in range(len(matrix)):
+        for column_index in non_zero_column_indexes:
+            if matrix[row_index][column_index] == 0:
+                matrix = _mark_row_zero(matrix, row_index)
+                zero_column_indexes.add(column_index)
+                non_zero_column_indexes.remove(column_index)
+                break
+                
+    for column_index in zero_column_indexes:
+        matrix = _mark_column_zero(matrix, column_index)
+    
+    return matrix
+
+
+def _mark_row_zero(matrix: list[list[int]], row_index: int) -> list[list[int]]:
+    for column_index in range(len(matrix[row_index])):
+        matrix[row_index][column_index] = 0
+    
+    return matrix
+
+
+def _mark_column_zero(matrix: list[list[int]], column_index: int) -> list[list[int]]:
+    for row_index in range(len(matrix)):
+        matrix[row_index][column_index] = 0
+        
+    return matrix
