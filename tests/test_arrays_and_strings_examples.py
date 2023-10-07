@@ -1,4 +1,4 @@
-from arrays_and_strings.arrays_and_strings_examples import are_one_away, compress, is_a_palindrome, is_permutation, is_unique, is_unique_no_datastructures, is_unique_no_datastructures_other, propagate_zeros, rotate, urlify
+from arrays_and_strings.arrays_and_strings_examples import are_one_away, compress, is_a_palindrome, is_permutation, is_rotation, is_unique, is_unique_no_datastructures, is_unique_no_datastructures_other, propagate_zeros, rotate, urlify
 import pytest
 
 
@@ -141,5 +141,18 @@ def test_propegate_zeros_when_zeros_exist_then_rows_and_columns_are_updated():
     ]
     
     actual = propagate_zeros(matrix)
+    
+    assert actual == expected
+
+
+@pytest.mark.parametrize(
+    "s1,s2,expected",
+    [
+        pytest.param('erbottlewat', 'waterbottle', True),
+        pytest.param('biggei', 'figgie', False),
+    ]
+)
+def test_is_rotation_when_determined_then_result_is_as_expected(s1, s2, expected):
+    actual = is_rotation(s1, s2)
     
     assert actual == expected
