@@ -268,13 +268,3 @@ def _mark_column_zero(matrix: list[list[int]], column_index: int) -> list[list[i
         matrix[row_index][column_index] = 0
         
     return matrix
-
-
-# 1.9 - String Rotation: Assume you have a method isSubstring which checks if one word is a substring og another.
-# Given two strings s1 and s2, write code to check if s2 is a rotation of s1 using only one call to isSubstring(e.g. waterbottle is a "rotation" of "erbottlewat").
-def is_rotation(s1: str, s2: str) -> bool:
-    if not s1 or not s2 or len(s1) != len(s2):
-        return False
-    
-    s1s1 = s1 + s1
-    return s2 in s1s1
