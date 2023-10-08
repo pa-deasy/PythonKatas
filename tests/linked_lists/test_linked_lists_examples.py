@@ -1,6 +1,6 @@
 import pytest
 
-from linked_lists.linked_lists_examples import LinkedList, Node
+from linked_lists.linked_lists_examples import LinkedList, Node, sum_lists
 
 @pytest.fixture
 def with_duplicates():
@@ -25,6 +25,24 @@ def for_partition():
     
     return LinkedList(head=node_a)
     
+    
+@pytest.fixture
+def sum_a():
+    node_c = Node(value=6, next=None)
+    node_b = Node(value=1, next=node_c)
+    node_a = Node(value=7, next=node_b)
+    
+    return LinkedList(head=node_a)
+
+
+@pytest.fixture
+def sum_b():
+    node_c = Node(value=2, next=None)
+    node_b = Node(value=9, next=node_c)
+    node_a = Node(value=5, next=node_b)
+    
+    return LinkedList(head=node_a)
+
 
 def test_remove_dups_when_removed_then_linked_list_has_no_dups(with_duplicates):
     with_duplicates.remove_dups()
@@ -74,3 +92,11 @@ def test_partition_when_paritioned_then_divided_as_expected(for_partition):
     assert for_partition.head.next.next.next.next.value == 8
     assert for_partition.head.next.next.next.next.next.value == 5
     assert for_partition.head.next.next.next.next.next.next.value == 10
+    
+
+def test_sum_lists_when_summed_then_sum_is_as_expected(sum_a, sum_b):
+    sum = sum_lists(sum_a, sum_b)
+    
+    assert sum.head.value == 2
+    assert sum.head.next.value == 1
+    assert sum.head.next.next.value == 9
