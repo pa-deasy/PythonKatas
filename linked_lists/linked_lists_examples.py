@@ -6,6 +6,12 @@ from typing import Set, Tuple
 class Node:
     value: int
     next: 'Node' 
+    
+    
+@dataclass
+class LastNodeDetails:
+    length: int
+    last: Node
 
 
 class LinkedList:
@@ -132,7 +138,18 @@ class LinkedList:
             current_other = current_other.next
             
         return False if current_self or current_other else True
+    
+    def get_last_node_details(self) -> LastNodeDetails:
+        if not self.head:
+            return LastNodeDetails(length=0, last=None)
         
+        length = 1
+        current = self.head
+        while current and current.next:
+            length += 1
+            current = current.next
+        
+        return LastNodeDetails(length=length, last=current)
         
 
 # 2.5 - Sum Lists: You have two numbers represented by a linked list, where each node contains a single digit.
@@ -162,3 +179,31 @@ def _sum(a: Node, b :Node, carryover: int) -> LinkedList:
     
     return result
     
+    
+# 2.7 - Intersection: Given two (singly) linked lists, determine if the two lists intersect. Return the intersecting node.
+# Note that the intersection is definded based on reference, not value. That is, if the kth node of the first linked list is the exact same node(by reference) as the jth node of the second list, then they are intersecting.
+def intersection(a: LinkedList, b: LinkedList) -> Node:    
+    a_last_node_details = a.get_last_node_details()
+    b_last_node_details = b.get_last_node_details()
+    
+    if a_last_node_details.last != b_last_node_details.last:
+        return None
+    
+    longer, shorter = (a.head, b.head) if a_last_node_details.length > b_last_node_details.length else (b.head, a.head)
+    
+    diff = abs(a_last_node_details.length - b_last_node_details.length)
+    
+    diff_counter = 0
+    while diff_counter < diff:
+        longer = longer.next
+        diff_counter += 1
+        
+    while longer and shorter:
+        if longer == shorter:
+            return longer
+        
+        longer = longer.next
+        shorter = shorter.next
+        
+    return None
+

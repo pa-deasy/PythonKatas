@@ -1,6 +1,6 @@
 import pytest
 
-from linked_lists.linked_lists_examples import LinkedList, Node, sum_lists
+from linked_lists.linked_lists_examples import LinkedList, Node, intersection, sum_lists
 
 @pytest.fixture
 def with_duplicates():
@@ -154,4 +154,34 @@ def test_is_equal_when_not_equal_then_returns_false(palindrome, not_palindrome):
     result = palindrome.is_equal(not_palindrome)
     
     assert result is False
+    
+    
+# 10 -> 1 -> 2 -> 3
+# 20 -> 21 -> 1 -> 2 -> 3
+def test_intersection_when_intersecting_then_returns_intersecting_node():
+    inter_c = Node(value=3, next=None)
+    inter_b = Node(value=2, next=inter_c)
+    inter = Node(value=1, next=inter_b)
+    
+    a_head = Node(value=10, next=inter)
+    
+    b_head_next = Node(value=21, next=inter)
+    b_head = Node(value=20, next=b_head_next)
+    
+    result = intersection(LinkedList(head=a_head), LinkedList(head=b_head))
+    
+    assert result == inter
+    
+
+def test_intersection_when_not_intersecting_then_returns_none(sum_a, sum_b):
+    result = intersection(sum_a, sum_b)
+    
+    assert result is None
+    
+    
+def test_get_last_node_details_when_obtained_then_as_expected(sum_a):
+    details = sum_a.get_last_node_details()
+    
+    assert details.length == 3
+    assert details.last.value == 6
     
