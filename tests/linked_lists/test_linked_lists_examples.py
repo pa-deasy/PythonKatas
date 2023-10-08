@@ -44,6 +44,28 @@ def sum_b():
     return LinkedList(head=node_a)
 
 
+@pytest.fixture
+def palindrome():
+    node_e = Node(value=1, next=None)
+    node_d = Node(value=2, next=node_e)
+    node_c = Node(value=3, next=node_d)
+    node_b = Node(value=2, next=node_c)
+    node_a = Node(value=1, next=node_b)
+    
+    return LinkedList(head=node_a)
+
+
+@pytest.fixture
+def not_palindrome():
+    node_e = Node(value=1, next=None)
+    node_d = Node(value=2, next=node_e)
+    node_c = Node(value=3, next=node_d)
+    node_b = Node(value=3, next=node_c)
+    node_a = Node(value=1, next=node_b)
+    
+    return LinkedList(head=node_a)
+
+
 def test_remove_dups_when_removed_then_linked_list_has_no_dups(with_duplicates):
     with_duplicates.remove_dups()
     
@@ -100,3 +122,36 @@ def test_sum_lists_when_summed_then_sum_is_as_expected(sum_a, sum_b):
     assert sum.head.value == 2
     assert sum.head.next.value == 1
     assert sum.head.next.next.value == 9
+    
+
+def test_is_palindrome_when_palindrome_then_returns_true(palindrome):
+    result = palindrome.is_palindrome()
+    assert result is True
+    
+
+def test_is_palindrome_when_not_palindrome_then_returns_false(not_palindrome):
+    result = not_palindrome.is_palindrome()
+    assert result is False
+    
+    
+def test_reverse_when_reversed_then_in_correct_order(not_palindrome):
+    reversed = not_palindrome.reverse()
+    
+    assert reversed.head.value == 1
+    assert reversed.head.next.value == 2
+    assert reversed.head.next.next.value == 3
+    assert reversed.head.next.next.next.value == 3
+    assert reversed.head.next.next.next.next.value == 1
+    
+    
+def test_is_equal_when_equal_then_returns_true(palindrome):
+    result = palindrome.is_equal(palindrome)
+    
+    assert result is True
+    
+    
+def test_is_equal_when_not_equal_then_returns_false(palindrome, not_palindrome):
+    result = palindrome.is_equal(not_palindrome)
+    
+    assert result is False
+    

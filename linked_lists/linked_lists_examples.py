@@ -103,6 +103,37 @@ class LinkedList:
         
         self.head = left_head if left_head else right_head
         
+    # 2.6 - Palindrome: Implement a function to check if a linked list is a palindrome
+    def is_palindrome(self):
+        reversed = self.reverse()
+        
+        return self.is_equal(reversed)
+    
+    def reverse(self) -> 'LinkedList':
+        new_head = None
+        current = self.head
+        
+        while current:
+            node = Node(value=current.value, next=new_head)
+            new_head = node
+            current = current.next
+            
+        return LinkedList(head=new_head)
+    
+    def is_equal(self, other: 'LinkedList') -> bool:
+        current_self = self.head
+        current_other = other.head
+        
+        while current_self and current_other:
+            if current_self.value != current_other.value:
+                return False
+            
+            current_self = current_self.next
+            current_other = current_other.next
+            
+        return False if current_self or current_other else True
+        
+        
 
 # 2.5 - Sum Lists: You have two numbers represented by a linked list, where each node contains a single digit.
 # The digits are stored in reverse order, such that 1's digit is at the head of the list. Write a function that adds the two numbers and returns the sum of the linked list.
