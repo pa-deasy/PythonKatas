@@ -150,6 +150,30 @@ class LinkedList:
             current = current.next
         
         return LastNodeDetails(length=length, last=current)
+    
+    
+    # 2.8 - Loop Detection: Given a linked list which might contain a loop, implement an algorithm that returns the node at the beginning of the loop(if one exists).
+    def get_loop(self) -> Node:
+        slow = self.head
+        fast = self.head
+        
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            
+            if slow == fast:
+                break
+            
+        slow = self.head
+        
+        while fast.next:
+            if slow == fast:
+                return slow
+            
+            slow = slow.next
+            fast = fast.next
+        
+        return None
         
 
 # 2.5 - Sum Lists: You have two numbers represented by a linked list, where each node contains a single digit.

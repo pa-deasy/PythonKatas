@@ -65,6 +65,17 @@ def not_palindrome():
     
     return LinkedList(head=node_a)
 
+@pytest.fixture
+def with_loop():
+    node_e = Node(value=5, next=None)
+    node_d = Node(value=4, next=node_e)
+    node_c = Node(value=3, next=node_d)
+    node_b = Node(value=2, next=node_c)
+    node_a = Node(value=1, next=node_b)
+    node_e.next = node_c
+    
+    return LinkedList(head=node_a)
+
 
 def test_remove_dups_when_removed_then_linked_list_has_no_dups(with_duplicates):
     with_duplicates.remove_dups()
@@ -185,3 +196,14 @@ def test_get_last_node_details_when_obtained_then_as_expected(sum_a):
     assert details.length == 3
     assert details.last.value == 6
     
+    
+def test_get_loop_when_loop_exists_then_return_first_node_of_loop(with_loop):
+    loop = with_loop.get_loop()
+    
+    assert loop.value == 3
+   
+    
+def test_has_loop_when_no_loop_exists_then_returns_none(with_duplicates):
+    loop = with_duplicates.get_loop()
+    
+    assert loop is None
