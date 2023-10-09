@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from enum import Enum
 import math
 from typing import List
 
@@ -194,3 +196,105 @@ def sort_stack(stack: Stack) -> Stack:
         stack.push(other.pop())
     
     return stack
+
+
+# 3.6 - An animal shelter, which holds only dogs and cats, operateds on strictly "first in, first out" basis.
+# People must adopt either the oldest(based on arrival time) of all animals at the shelter, or they can select whether they would prefer a dog or a cat(receive oldest of that type).
+# They cannot select which specific animal they would like. Create the data structure to maintain this system and implement operations such as enqueue, dequeueAny, dequeueDog and dequeueCat.
+# You may use the build-in LinkedList datastructure.
+class AnimalType(Enum):
+    Dog = 'dog'
+    Cat = 'cat'
+
+
+@dataclass
+class Animal:
+    name: str
+    type: AnimalType
+    
+
+@dataclass
+class AnimalNode:
+    value: Animal
+    next: 'AnimalNode' 
+    
+
+class LinkedList:
+    head: AnimalNode
+    
+    def __init__(self, head: AnimalNode) -> None:
+        self.head = head
+    
+    def last(self) -> AnimalNode:
+        if not self.head:
+            return self.head
+        
+        current = self.head
+        while current.next:
+            current = current.next
+            
+        return current
+    
+    def first_of(self, type: AnimalType) -> AnimalNode:
+        current = self.head
+        
+        while current:
+            if current.value.type == type:
+                return current
+            
+            current = current.next
+            
+        return None
+    
+    def remove_at(self, node: AnimalNode) -> None:
+        if not node:
+            return
+        
+        node.value = node.next.value
+        node.next = node.next.next
+
+
+class AnimalShelter:
+    animals: LinkedList
+    
+    def __init__(self) -> None:
+        self.animals = LinkedList(head=None)
+        
+    def enqueue(self, animal: Animal) -> None:
+        node = AnimalNode(value=animal, next=None)
+        last = self.animals.last()
+        
+        if not last:
+            self.animals.head = node
+        else:
+            last.next = node
+        
+    def dequeue_any(self) -> Animal:
+        oldest = self.animals.head
+        self.animals.head = oldest.next
+        
+        return oldest.value if oldest else None
+    
+    def dequeue_dog(self) -> Animal:
+        return self._dequeue_type(AnimalType.Dog)
+
+    def dequeue_cat(self) -> Animal:
+        return self._dequeue_type(AnimalType.Cat)
+    
+    def _dequeue_type(self, type: AnimalType) -> Animal:
+        oldest = self.animals.first_of(type)
+        dequeued = oldest.value if oldest else None
+        
+        self.animals.remove_at(oldest)
+        
+        return dequeued
+    
+    
+    
+    
+        
+    
+        
+        
+
+# d d c d c c

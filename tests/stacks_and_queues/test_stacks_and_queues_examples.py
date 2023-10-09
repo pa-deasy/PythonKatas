@@ -1,4 +1,4 @@
-from stacks_and_queues.stacks_and_queues_examples import MinStack, MultiStack, MyQueue, SetOfStacks, Stack, sort_stack
+from stacks_and_queues.stacks_and_queues_examples import Animal, AnimalShelter, AnimalType, MinStack, MultiStack, MyQueue, SetOfStacks, Stack, sort_stack
 
 
 def test_multistack_when_operated_on_then_behaves_as_expected():
@@ -104,3 +104,17 @@ def test_sort_stack_when_operated_on_then_behaves_as_expected():
     assert sorted_stack.pop() == 4
     assert sorted_stack.pop() == 5
     assert sorted_stack.is_empty() is True
+    
+    
+def test_animalshelter_when_operated_on_then_behaves_as_expected():
+    shelter = AnimalShelter()
+    
+    shelter.enqueue(Animal(name='Bob', type=AnimalType.Cat))
+    shelter.enqueue(Animal(name='Tim', type=AnimalType.Cat))
+    shelter.enqueue(Animal(name='Bill', type=AnimalType.Dog))
+    shelter.enqueue(Animal(name='Frank', type=AnimalType.Cat))
+    shelter.enqueue(Animal(name='Peter', type=AnimalType.Dog))
+    
+    assert shelter.dequeue_dog().name == 'Bill'
+    assert shelter.dequeue_cat().name == 'Bob'
+    assert shelter.dequeue_any().name == 'Tim'
