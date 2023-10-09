@@ -1,4 +1,4 @@
-from stacks_and_queues.stacks_and_queues_examples import MinStack, MultiStack, SetOfStacks
+from stacks_and_queues.stacks_and_queues_examples import MinStack, MultiStack, MyQueue, SetOfStacks, Stack, sort_stack
 
 
 def test_multistack_when_operated_on_then_behaves_as_expected():
@@ -71,3 +71,36 @@ def test_setofstacks_when_operated_on_then_behaves_as_expected():
     
     assert stack.peek() == 7
     
+    
+def test_myqueue_when_operated_on_then_behaves_as_expected():
+    queue = MyQueue()
+    
+    queue.enqueue(1)
+    assert queue.peek() == 1
+    queue.enqueue(2)
+    assert queue.peek() == 1
+    queue.enqueue(3)
+    assert queue.peek() == 1
+    queue.enqueue(4)
+    assert queue.peek() == 1
+    
+    assert queue.dequeue() == 1
+    assert queue.peek() == 2
+    
+    
+def test_sort_stack_when_operated_on_then_behaves_as_expected():
+    stack = Stack()
+    stack.push(3)
+    stack.push(5)
+    stack.push(2)
+    stack.push(4)
+    stack.push(1)
+    
+    sorted_stack = sort_stack(stack)
+    
+    assert sorted_stack.pop() == 1
+    assert sorted_stack.pop() == 2
+    assert sorted_stack.pop() == 3
+    assert sorted_stack.pop() == 4
+    assert sorted_stack.pop() == 5
+    assert sorted_stack.is_empty() is True

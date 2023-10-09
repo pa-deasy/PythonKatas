@@ -72,6 +72,9 @@ class Stack:
     def size(self) -> int:
         return len(self.values)
     
+    def is_empty(self) -> bool:
+        return len(self.values) == 0
+    
     
 class MinStack(Stack):
     mins: Stack
@@ -147,4 +150,47 @@ class SetOfStacks:
         self.stack_index -= 1
         self.stacks = self.stacks[:self.stack_index + 1]
         
+
+# 3.4 - Queue via Stack: Implement a MyQueue class which implements a queue using two stacks.
+class MyQueue:
+    queue: Stack
+    
+    def __init__(self) -> None:
+        self.queue = Stack()
+    
+    def enqueue(self, value: int) -> None:
+        temporary = Stack()
         
+        while not self.queue.is_empty():
+            popped = self.queue.pop()
+            temporary.push(popped)
+        
+        temporary.push(value)
+        
+        while not temporary.is_empty():
+            popped = temporary.pop()
+            self.queue.push(popped)
+            
+    def dequeue(self) -> int:
+        return self.queue.pop()
+    
+    def peek(self) -> int:
+        return self.queue.peek()
+    
+    
+# 3.5 - Sort Stack: Write a program to sort a stack such that the smallest items are on the top. 
+# You can use an additional temporary stack, but you may not copy the elements into any other data structure(such as an array).
+def sort_stack(stack: Stack) -> Stack:
+    other = Stack()
+    
+    while not stack.is_empty():
+        temp = stack.pop()
+        while not other.is_empty() and other.peek() > temp:
+            stack.push(other.pop())
+            
+        other.push(temp)
+        
+    while not other.is_empty():
+        stack.push(other.pop())
+    
+    return stack
