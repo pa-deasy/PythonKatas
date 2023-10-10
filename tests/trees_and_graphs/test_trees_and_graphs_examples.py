@@ -1,4 +1,69 @@
-from trees_and_graphs.trees_and_graphs_examples import Node, TreeNode, check_route_exists, create_bst_from_sorted_list, create_linked_lists_from_tree
+import pytest
+from trees_and_graphs.trees_and_graphs_examples import Node, TreeDetails, TreeNode, check_is_balanced_tree, check_is_bst, check_route_exists, create_bst_from_sorted_list, create_linked_lists_from_tree, get_tree_details
+
+
+#                       12
+#               7                   70       
+#           3       8           55      80
+#       1                   18
+@pytest.fixture
+def bst():
+    root_12 = TreeNode(value=12, left=None, right=None)
+    node_7 = TreeNode(value=7, left=None, right=None)
+    node_3 = TreeNode(value=3, left=None, right=None)
+    node_1 = TreeNode(value=1, left=None, right=None)
+    node_8 = TreeNode(value=8, left=None, right=None)
+    node_70 = TreeNode(value=70, left=None, right=None)
+    node_55 = TreeNode(value=55, left=None, right=None)
+    node_18 = TreeNode(value=18, left=None, right=None)
+    node_80 = TreeNode(value=80, left=None, right=None)
+    
+    root_12.left = node_7
+    root_12.left.left = node_3
+    root_12.left.left.left = node_1
+    root_12.left.right = node_8
+    root_12.right = node_70
+    root_12.right.left = node_55
+    root_12.right.left.left = node_18
+    root_12.right.right = node_80
+    
+    return root_12
+
+
+#                       9
+#               7                   70       
+#           3       8           55      80
+#       1              10     18              85
+#                                               87
+@pytest.fixture
+def unbalanced():
+    root_9 = TreeNode(value=9, left=None, right=None)
+    node_7 = TreeNode(value=7, left=None, right=None)
+    node_3 = TreeNode(value=3, left=None, right=None)
+    node_1 = TreeNode(value=1, left=None, right=None)
+    node_8 = TreeNode(value=8, left=None, right=None)
+    node_10 = TreeNode(value=10, left=None, right=None)
+    node_70 = TreeNode(value=70, left=None, right=None)
+    node_55 = TreeNode(value=55, left=None, right=None)
+    node_18 = TreeNode(value=18, left=None, right=None)
+    node_80 = TreeNode(value=80, left=None, right=None)
+    node_85 = TreeNode(value=85, left=None, right=None)
+    node_87 = TreeNode(value=87, left=None, right=None)
+    
+    
+    root_9.left = node_7
+    root_9.left.left = node_3
+    root_9.left.left.left = node_1
+    root_9.left.right = node_8
+    root_9.right = node_70
+    root_9.right.left = node_55
+    root_9.right.left.left = node_18
+    root_9.right.right = node_80
+    node_80.right = node_85
+    node_85.right = node_87
+    node_8.right = node_10
+    
+    return root_9
 
 
 def test_check_route_exists_when_route_exists_then_returns_true():
@@ -49,33 +114,10 @@ def test_create_bst_from_sorted_list_when_created_then_bst_ordered_as_expected()
     assert bst.right.left.value == 55
     assert bst.right.left.left.value == 18
     assert bst.right.right.value == 80
-         
-#                       12
-#               7                   70       
-#           3       8           55      80
-#       1                   18
 
-def test_create_linked_lists_from_tree_when_created_then_lists_as_expected():
-    root_12 = TreeNode(value=12, left=None, right=None)
-    node_7 = TreeNode(value=7, left=None, right=None)
-    node_3 = TreeNode(value=3, left=None, right=None)
-    node_1 = TreeNode(value=1, left=None, right=None)
-    node_8 = TreeNode(value=8, left=None, right=None)
-    node_70 = TreeNode(value=70, left=None, right=None)
-    node_55 = TreeNode(value=55, left=None, right=None)
-    node_18 = TreeNode(value=18, left=None, right=None)
-    node_80 = TreeNode(value=80, left=None, right=None)
-    
-    root_12.left = node_7
-    root_12.left.left = node_3
-    root_12.left.left.left = node_1
-    root_12.left.right = node_8
-    root_12.right = node_70
-    root_12.right.left = node_55
-    root_12.right.left.left = node_18
-    root_12.right.right = node_80
-    
-    linked_lists = create_linked_lists_from_tree(root_12)
+
+def test_create_linked_lists_from_tree_when_created_then_lists_as_expected(bst):
+    linked_lists = create_linked_lists_from_tree(bst)
     
     assert len(linked_lists) == 4
     assert linked_lists[0].head.value == 12
@@ -91,3 +133,41 @@ def test_create_linked_lists_from_tree_when_created_then_lists_as_expected():
     assert linked_lists[3].head.value == 18
     assert linked_lists[3].head.next.value == 1
     assert linked_lists[3].head.next.next is None
+
+
+def test_check_is_balanced_tree_when_balanced_then_returns_true(bst):
+    is_balanced = check_is_balanced_tree(bst)
+    
+    assert is_balanced is True
+    
+    
+def test_check_is_balanced_tree_when_unbalanced_then_returns_false(unbalanced):
+    is_balanced = check_is_balanced_tree(unbalanced)
+    
+    assert is_balanced is False
+
+
+def test_get_tree_details_when_balanced_then_min_max_height_as_expected(bst):
+    details = get_tree_details(bst, 0, TreeDetails())
+    
+    assert details.min_height == 3
+    assert details.max_height == 4
+    
+    
+def test_get_tree_details_when_unbalanced_then_min_max_height_as_expected(unbalanced):
+    details = get_tree_details(unbalanced, 0, TreeDetails())
+    
+    assert details.min_height == 3
+    assert details.max_height == 5
+    
+    
+def test_check_is_bst_when_bst_then_returns_true(bst):
+    is_bst = check_is_bst(bst)
+    
+    assert is_bst is True
+    
+
+def test_check_is_bst_when_not_bst_then_returns_false(unbalanced):
+    is_bst = check_is_bst(unbalanced)
+    
+    assert is_bst is False

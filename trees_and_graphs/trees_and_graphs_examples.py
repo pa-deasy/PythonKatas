@@ -80,4 +80,43 @@ def create_linked_lists_from_tree(root: TreeNode) -> List[LinkedList]:
         queue = next_queue
         
     return linked_lists
+
             
+# 4.4 - Check Balanced: Implement a function to check if a binary tree is balanced. 
+# For the purpose of this question, a balanced tree is defined to be a tree such that the height of the two subtrees of any node never differ by more than one.
+@dataclass
+class TreeDetails:
+    min_height: int = None
+    max_height: int = None
+
+
+def check_is_balanced_tree(node: TreeNode) -> bool:
+    details = get_tree_details(node, 0, TreeDetails())
+    return details.max_height - details.min_height <= 1
+
+
+def get_tree_details(node: TreeNode, count: int, details: TreeDetails) -> TreeDetails:
+    if not node:
+        details.min_height = count if not details.min_height or details.min_height > count else details.min_height
+        details.max_height = count if not details.max_height or details.max_height < count else details.max_height
+        return details
+    
+    get_tree_details(node.left, count + 1, details)
+    get_tree_details(node.right, count + 1, details)
+    
+    return details
+
+
+# 4.5 - Validate BST - Implement a function to check if a binary tree is a binary search tree.
+def check_is_bst(node: TreeNode, min: int = None, max: int = None) -> bool:
+    if node is None:
+        return True
+    
+    if min and node.value <= min or max and node.value > max:
+        return False
+    
+    left = check_is_bst(node.left, min, node.value)
+    right = check_is_bst(node.right, node.value, max)
+    
+    return left and right
+    
