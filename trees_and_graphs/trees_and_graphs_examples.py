@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import math
 from queue import Queue
-from typing import List
+from typing import Dict, List, Set, Tuple
 
 from linked_lists.linked_lists_examples import LinkedList, Node
 
@@ -119,4 +119,81 @@ def check_is_bst(node: TreeNode, min: int = None, max: int = None) -> bool:
     right = check_is_bst(node.right, node.value, max)
     
     return left and right
+
+
+# 4.6 - Successor: Write an algorithm to find the "next" node(i.e. in-order successor) of a given node in a binary search tree.
+# You may assume that each node has a link to it's parent.
+def get_in_order_successor(node: TreeNode) -> TreeNode:
+    if not node:
+        return None
     
+    if node.right:
+        return _left_most_child(node.right)
+    else:
+        other = node
+        other_parent = other.parent
+        while other_parent and other_parent.left != other:
+            other = other_parent
+            other_parent = other_parent.parent
+        return other_parent
+    
+    
+def _left_most_child(node: TreeNode) -> TreeNode:
+    if not node:
+        return None
+    
+    while node.left:
+        node = node.left
+        
+    return node
+
+
+# 4.7 Build Order: You are given a list of projects and a list of dependencies(which is a list of pairs of projects, where the second project is dependent on the first project).
+# All of a project's dependencies must be built before the project is. Find a build order that will allow the projects to be built.
+# If no valid build order, return error.
+# Input -  projects: a, b, c, d, e, f       dependencies: (a, d), (f, b), (b, d), (f, a), (d, c)
+# Output - f, e, a, b, d, c 
+# a: f
+# b: f
+# c: d
+# d: a b
+# e
+# f: 
+def get_build_order(projects: list[str], dependencies: list[Tuple[str, str]]) -> list[str]:
+    empty_map: Dict[str, list[str]] = _generate_dependencies_map(projects)
+    (map, roots) = _populate_dependencies_map_and_roots(empty_map, dependencies)
+    
+    roots.sort(reverse=True)
+    order: list[str] = []
+    visited: Set[int] = set()
+    while roots:
+        value = roots.pop(0)
+        
+        if value in visited:
+            continue
+        
+        order.insert(0, value)
+        visited.add(value)
+        roots += map[value]
+            
+    return order
+
+    
+def _generate_dependencies_map(projects: list[str]) -> Dict[str, list[str]]:
+    map: Dict[str, list[str]] = {}
+    
+    for p in projects:
+        map[p] = []
+        
+    return map    
+    
+    
+def _populate_dependencies_map_and_roots(map: Dict[str, list[str]], dependencies: list[Tuple[str, str]]) -> Tuple[Dict[str, list[str]], list[str]]:
+    potential_roots = set(map.keys())
+    for (d_to, d_from) in dependencies:
+        dependents = map[d_from]
+        dependents.append(d_to)
+        map[d_from] = dependents
+        potential_roots.discard(d_to)
+        
+    return (map, list(potential_roots))

@@ -1,5 +1,5 @@
 import pytest
-from trees_and_graphs.trees_and_graphs_examples import Node, TreeDetails, TreeNode, check_is_balanced_tree, check_is_bst, check_route_exists, create_bst_from_sorted_list, create_linked_lists_from_tree, get_tree_details
+from trees_and_graphs.trees_and_graphs_examples import Node, TreeDetails, TreeNode, check_is_balanced_tree, check_is_bst, check_route_exists, create_bst_from_sorted_list, create_linked_lists_from_tree, get_build_order, get_in_order_successor, get_tree_details
 
 
 #                       12
@@ -171,3 +171,29 @@ def test_check_is_bst_when_not_bst_then_returns_false(unbalanced):
     is_bst = check_is_bst(unbalanced)
     
     assert is_bst is False
+    
+    
+def test_get_in_order_successor_when_obtained_then_as_expected(bst):
+    successor = get_in_order_successor(bst)
+    
+    assert successor is not None
+    
+    
+def test_get_build_order_when_obtained_then_ordered_as_expected():
+    projects = ['a', 'b', 'c', 'd', 'e', 'f']
+    dependencies = [('a', 'd'), ('f', 'b'), ('b', 'd'), ('f', 'a'), ('d', 'c')]
+    expected = ['f' , 'b', 'a', 'd', 'c', 'e']
+    
+    order = get_build_order(projects, dependencies)
+    
+    assert order == expected
+    
+    
+def test_get_build_order_when_circular_dependency_then_ordered_as_expected():
+    projects = ['a', 'b', 'c', 'd', 'e', 'f']
+    dependencies = [('a', 'd'), ('f', 'b'), ('d', 'b'), ('b', 'd'), ('f', 'a'), ('d', 'c')]
+    expected = ['f' , 'b', 'a', 'd', 'c', 'e']
+    
+    order = get_build_order(projects, dependencies)
+    
+    assert order == expected
