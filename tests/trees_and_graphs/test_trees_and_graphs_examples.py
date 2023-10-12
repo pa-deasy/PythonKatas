@@ -1,5 +1,5 @@
 import pytest
-from trees_and_graphs.trees_and_graphs_examples import Node, TreeDetails, TreeNode, check_is_balanced_tree, check_is_bst, check_route_exists, create_bst_from_sorted_list, create_linked_lists_from_tree, get_build_order, get_in_order_successor, get_tree_details
+from trees_and_graphs.trees_and_graphs_examples import Node, TreeDetails, TreeNode, check_contains, check_is_balanced_tree, check_is_bst, check_route_exists, create_bst_from_sorted_list, create_linked_lists_from_tree, get_build_order, get_first_common_ancestor, get_in_order_successor, get_tree_details
 
 
 #                       12
@@ -197,3 +197,24 @@ def test_get_build_order_when_circular_dependency_then_ordered_as_expected():
     order = get_build_order(projects, dependencies)
     
     assert order == expected
+
+
+def test_get_first_common_ancestor_when_exists_then_returns_correct_ancestor(unbalanced):
+    assert get_first_common_ancestor(unbalanced, 1, 8).value == 7
+    assert get_first_common_ancestor(unbalanced, 10, 55).value == 9
+    assert get_first_common_ancestor(unbalanced, 18, 80).value == 70
+    
+
+def test_get_first_common_ancestor_when_not_exists_then_returns_None(unbalanced):
+    assert get_first_common_ancestor(unbalanced, 1, 90) is None
+    
+    
+def test_check_contains_when_exists_then_returns_true(unbalanced):
+    assert check_contains(unbalanced, 1) is True
+    assert check_contains(unbalanced, 55) is True
+    
+
+def test_check_contains_when_not_exists_then_returns_false(unbalanced):
+    assert check_contains(unbalanced, 109) is False
+    assert check_contains(unbalanced, 809) is False
+    

@@ -197,3 +197,35 @@ def _populate_dependencies_map_and_roots(map: Dict[str, list[str]], dependencies
         potential_roots.discard(d_to)
         
     return (map, list(potential_roots))
+
+
+# 4.8 - First Common Ancestor: Design an algorithm and write code to find the first common ancestor of two nodes in a binary tree.
+# This is not necessarily a binary search tree.
+def get_first_common_ancestor(root: TreeNode, left: int, right: int) -> TreeNode:
+    if not root:
+        return None
+    
+    left_contains = check_contains(root.left, left)
+    right_contains = check_contains(root.right, right)
+    
+    if left_contains and right_contains:
+        return root
+    elif left_contains:
+        return get_first_common_ancestor(root.left, left, right)
+    elif right_contains:
+        return get_first_common_ancestor(root.right, left, right)
+    else:
+        return None
+
+
+def check_contains(root: TreeNode, value: int) -> bool:
+    if not root:
+        return False
+    
+    if root.value == value:
+        return True
+    
+    left = check_contains(root.left, value)
+    right = check_contains(root.right, value)
+    
+    return left or right
