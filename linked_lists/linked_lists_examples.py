@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Set, Tuple
+from typing import List, Set
 
 
 @dataclass
@@ -19,7 +19,7 @@ class LinkedList:
     
     def __init__(self, head: Node) -> None:
         self.head = head
-    
+        
     # 2.1 - Remove Dups: Write code to remove duplicates from an unsorted linked list.
     # How would you solve the problem if a temporary buffer in not allowed?
     def remove_dups(self) -> None:
@@ -174,6 +174,69 @@ class LinkedList:
             fast = fast.next
         
         return None
+    
+    def remove_first(self) -> Node:
+        if not self.head:
+            return None
+        
+        node = self.head
+        self.head = self.head.next
+        return node
+        
+    def remove_last(self) -> Node:
+        if not self.head or not self.head.next:
+            self.head = None
+            
+        current = self.head
+        while current and current.next.next:
+            current = current.next
+        
+        node = current.next
+        current.next = None
+        return node
+        
+    def insert_first(self, node: Node) -> None:
+        node.next = self.head
+        self.head = node
+        
+    def insert_last(self, node: Node) -> None:
+        if not self.head:
+            self.head = node
+        
+        current = self.head
+        while current and current.next:
+            current = current.next
+            
+        current.next = node
+    
+    def to_list(self) -> List[int]:
+        numbers = []
+        if not self.head:
+            return numbers
+        
+        current = self.head
+        while current:
+            numbers.append(current.value)
+            current = current.next
+            
+        return numbers
+    
+    def clone(self) -> 'LinkedList':
+        cloned_head=Node(value=self.head.value, next=None)
+        
+        cloned = cloned_head
+        current = self.head.next
+        while current:
+            node = Node(value=current.value, next=None)
+            cloned.next = node
+            cloned = node
+            current = current.next
+            
+        return LinkedList(head=cloned_head)
+    
+    def add_all(self, other: 'LinkedList') -> None:
+        cloned = other.clone()
+        self.insert_last(cloned.head)
         
 
 # 2.5 - Sum Lists: You have two numbers represented by a linked list, where each node contains a single digit.

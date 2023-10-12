@@ -207,3 +207,72 @@ def test_has_loop_when_no_loop_exists_then_returns_none(with_duplicates):
     loop = with_duplicates.get_loop()
     
     assert loop is None
+
+
+def test_remove_first_when_removed_then_first_as_expected(for_partition):
+    removed = for_partition.remove_first()
+    
+    assert removed.value == 3
+    assert for_partition.head.value == 5
+    
+    
+def test_remove_last_when_removed_then_last_as_expected(sum_a):
+    removed = sum_a.remove_last()
+    
+    assert removed.value == 6
+    assert sum_a.head.next.value == 1
+    assert sum_a.head.next.next is None
+    
+
+def test_insert_first_when_inserted_then_first_as_expected(sum_a):
+    node = Node(value=109, next=None)
+    
+    sum_a.insert_first(node)
+    
+    assert sum_a.head.value == 109
+    assert sum_a.head.next.value == 7
+    
+    
+def test_insert_last_when_inserted_then_last_as_expected(sum_a):
+    node = Node(value=109, next=None)
+    
+    sum_a.insert_last(node)
+    
+    assert sum_a.head.next.next.value == 6
+    assert sum_a.head.next.next.next.value == 109
+    assert sum_a.head.next.next.next.next is None
+
+
+def test_to_list_when_converted_then_numbers_as_expected(sum_a):
+    numbers = sum_a.to_list()
+    
+    assert numbers == [7, 1, 6]
+    
+
+def test_clone_when_cloned_then_linked_list_as_expected(sum_a):
+    cloned = sum_a.clone()
+    
+    assert cloned.head.value == 7
+    assert cloned.head.next.value == 1
+    assert cloned.head.next.next.value == 6
+    
+    sum_a.remove_first()
+    sum_a.remove_first()
+    sum_a.remove_first()
+    assert sum_a.head is None
+    
+    
+def test_add_all_when_added_then_list_as_expected(sum_a, sum_b):
+    sum_a.add_all(sum_b)
+    
+    assert sum_a.head.value == 7
+    assert sum_a.head.next.value == 1
+    assert sum_a.head.next.next.value == 6
+    assert sum_a.head.next.next.next.value == 5
+    assert sum_a.head.next.next.next.next.value == 9
+    assert sum_a.head.next.next.next.next.next.value == 2
+    assert sum_a.head.next.next.next.next.next.next is None
+    
+    
+    
+
