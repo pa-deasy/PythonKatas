@@ -229,3 +229,48 @@ def check_contains(root: TreeNode, value: int) -> bool:
     right = check_contains(root.right, value)
     
     return left or right
+
+
+# 4.9 BST Sequences: A binary search tree was created by traversing through an array from left to right and inserting each element.
+# Given a binary search tree with distinct elements, print all possible arrays that could have led to this tree.
+def get_all_sequences(node: TreeNode) -> List[List[int]]:
+    result: List[LinkedList] = []
+    
+    if not node:
+        result.append(LinkedList(head=None))
+        return result
+    
+    prefix = LinkedList(head=Node(value=node.value, next=None))
+    
+    left_seq = get_all_sequences(node.left)
+    right_seq = get_all_sequences(node.right)
+    
+    for left in left_seq:
+        for right in right_seq:
+            weaved: List[LinkedList] = []
+            _weave_lists(left, right, weaved, prefix)
+            result += weaved
+            
+    return result
+
+
+def _weave_lists(first: LinkedList, second: LinkedList, results: List[LinkedList], prefix: LinkedList) -> None:
+    if not first or not second:
+        result = prefix.clone()
+        result.add_all(first)
+        result.add_all(second)
+        results.append(result)
+        return
+    
+    head_first = first.remove_first()
+    prefix.insert_last(head_first)
+    _weave_lists(first, second, results, prefix)
+    prefix.remove_last()
+    first.insert_first(head_first)
+    
+    head_second = second.remove_first()
+    prefix.insert_last(head_second)
+    _weave_lists(first, second, results, prefix)
+    prefix.remove_last()
+    second.insert_first(head_second)
+

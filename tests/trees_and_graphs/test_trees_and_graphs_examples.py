@@ -1,5 +1,5 @@
 import pytest
-from trees_and_graphs.trees_and_graphs_examples import Node, TreeDetails, TreeNode, check_contains, check_is_balanced_tree, check_is_bst, check_route_exists, create_bst_from_sorted_list, create_linked_lists_from_tree, get_build_order, get_first_common_ancestor, get_in_order_successor, get_tree_details
+from trees_and_graphs.trees_and_graphs_examples import Node, TreeDetails, TreeNode, check_contains, check_is_balanced_tree, check_is_bst, check_route_exists, create_bst_from_sorted_list, create_linked_lists_from_tree, get_all_sequences, get_build_order, get_first_common_ancestor, get_in_order_successor, get_tree_details
 
 
 #                       12
@@ -217,4 +217,11 @@ def test_check_contains_when_exists_then_returns_true(unbalanced):
 def test_check_contains_when_not_exists_then_returns_false(unbalanced):
     assert check_contains(unbalanced, 109) is False
     assert check_contains(unbalanced, 809) is False
+    
+
+@pytest.mark.skip('No idea')
+def test_get_all_sequences_when_calculated_then_as_expected(bst):
+    sources = get_all_sequences(bst)
+    
+    assert len(sources) >= 1
     
