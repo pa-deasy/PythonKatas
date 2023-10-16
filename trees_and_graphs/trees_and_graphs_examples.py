@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import math
 from queue import Queue
+import random
 from typing import Dict, List, Set, Tuple
 
 from linked_lists.linked_lists_examples import LinkedList, Node
@@ -231,6 +232,19 @@ def check_contains(root: TreeNode, value: int) -> bool:
     return left or right
 
 
+def return_contains(root: TreeNode, value: int) -> TreeNode:
+    if not root:
+        return None
+    
+    if root.value == value:
+        return root
+    
+    left = return_contains(root.left, value)
+    right = return_contains(root.right, value)
+    
+    return left if left else right
+
+
 # 4.9 BST Sequences: A binary search tree was created by traversing through an array from left to right and inserting each element.
 # Given a binary search tree with distinct elements, print all possible arrays that could have led to this tree.
 def get_all_sequences(node: TreeNode) -> List[List[int]]:
@@ -274,3 +288,83 @@ def _weave_lists(first: LinkedList, second: LinkedList, results: List[LinkedList
     prefix.remove_last()
     second.insert_first(head_second)
 
+
+# 4.10 - Check Subtree: T1 an T2 are two very large binary trees, with T1 much bigger than T2. Create an algorithm to determine if T2 is a subtree of T1.
+# A tree T2 is a subtree of T1 if there existsa node n in T1 such that the subtree of n is identical to T2. That is, if you cut off the tree at node n, the tree would be identical.
+def check_is_subtree(node: TreeNode, subtree: TreeNode) -> bool:
+    match = return_contains(node, subtree.value)
+    
+    if not match:
+        return False
+    
+    is_equal = check_is_equal(match, subtree)
+    
+    return is_equal
+    
+    
+def check_is_equal(a: TreeNode, b: TreeNode) -> bool:
+    if not a and not b:
+        return True
+    
+    if not a or not b:
+        return False
+    
+    equal = a.value == b.value
+    left_equal = check_is_equal(a.left, b.left)
+    right_equal = check_is_equal(a.right, b.right)
+    
+    return equal and left_equal and right_equal
+
+
+def get_node_count(node: TreeNode) -> int:
+    if not node:
+        return 0
+    
+    total = 1
+    total += get_node_count(node.left)
+    total += get_node_count(node.right)
+    
+    return total
+
+
+# 4.11 - Random Node: You are implementing a binary search tree class from scratch which, in addition to insert, find and delete, has a method getRandomNode() which returns a random node from the tree.
+# All nodes should be equally likely to be chosen. Design and implement an algorithm for getRandomNode, and explain how you would implement the rest of the methods.
+def to_list(node: TreeNode, numbers: List[int] = []) -> List[int]:
+    if node is None:
+        return numbers
+    
+    numbers.append(node.value)
+    
+    to_list(node.left)
+    to_list(node.right)
+    
+    return numbers
+
+
+def get_random_node(node: TreeNode) -> Node:
+    numbers = to_list(node)
+    guess = random.choice(numbers)
+    
+    return guess
+
+
+# 4.12 - Paths with Sums: You are given a binary tree in which each node contains an integer value(which might be positive or negative).
+# Design an algorithm to count the number of paths that sum to a given value. 
+# The path does not need to start or end at the root or a leaf but it must go downwards(traveling only from parent nodes to childs nodes).
+def get_count_of_sums(node: TreeNode, target: int, current: int = 0, current_count = 0) -> int:
+    count = 0
+    if not node:
+        return count
+    
+    current += node.value
+    
+    if current == target:
+        count += current_count + 1
+        
+    left = get_count_of_sums(node.left, target, current, count)
+    left_from_zero = get_count_of_sums(node.left, target, 0, count)
+    right = get_count_of_sums(node.right, target, current, count)
+    right_from_zero = get_count_of_sums(node.right, target, 0, count)
+    
+    # return left + left_from_zero + right + right_from_zero
+    return count + left + right + left_from_zero + right_from_zero

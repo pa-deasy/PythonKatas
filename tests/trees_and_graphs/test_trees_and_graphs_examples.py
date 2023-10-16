@@ -1,5 +1,5 @@
 import pytest
-from trees_and_graphs.trees_and_graphs_examples import Node, TreeDetails, TreeNode, check_contains, check_is_balanced_tree, check_is_bst, check_route_exists, create_bst_from_sorted_list, create_linked_lists_from_tree, get_all_sequences, get_build_order, get_first_common_ancestor, get_in_order_successor, get_tree_details
+from trees_and_graphs.trees_and_graphs_examples import Node, TreeDetails, TreeNode, check_contains, check_is_balanced_tree, check_is_bst, check_is_subtree, check_route_exists, create_bst_from_sorted_list, create_linked_lists_from_tree, get_all_sequences, get_build_order, get_count_of_sums, get_first_common_ancestor, get_in_order_successor, get_node_count, get_random_node, get_tree_details, return_contains, to_list
 
 
 #                       12
@@ -64,6 +64,34 @@ def unbalanced():
     node_8.right = node_10
     
     return root_9
+
+
+#                       12
+#               7                   -2       
+#           3       8           4      80
+#       1                   8
+@pytest.fixture
+def with_sums():
+    root_12 = TreeNode(value=12, left=None, right=None)
+    node_7 = TreeNode(value=7, left=None, right=None)
+    node_3 = TreeNode(value=3, left=None, right=None)
+    node_1 = TreeNode(value=1, left=None, right=None)
+    node_8 = TreeNode(value=8, left=None, right=None)
+    node_m2 = TreeNode(value=-2, left=None, right=None)
+    node_4 = TreeNode(value=4, left=None, right=None)
+    node_8 = TreeNode(value=8, left=None, right=None)
+    node_80 = TreeNode(value=80, left=None, right=None)
+    
+    root_12.left = node_7
+    root_12.left.left = node_3
+    root_12.left.left.left = node_1
+    root_12.left.right = node_8
+    root_12.right = node_m2
+    root_12.right.left = node_4
+    root_12.right.left.left = node_8
+    root_12.right.right = node_80
+    
+    return root_12
 
 
 def test_check_route_exists_when_route_exists_then_returns_true():
@@ -218,10 +246,76 @@ def test_check_contains_when_not_exists_then_returns_false(unbalanced):
     assert check_contains(unbalanced, 109) is False
     assert check_contains(unbalanced, 809) is False
     
+    
+def test_return_contains_when_exists_then_returns_true(unbalanced):
+    assert return_contains(unbalanced, 1).value == 1
+    assert return_contains(unbalanced, 55).value == 55
+    
+
+def test__contains_when_not_exists_then_returns_false(unbalanced):
+    assert return_contains(unbalanced, 109) is None
+    assert return_contains(unbalanced, 809) is None
+    
 
 @pytest.mark.skip('No idea')
 def test_get_all_sequences_when_calculated_then_as_expected(bst):
     sources = get_all_sequences(bst)
     
     assert len(sources) >= 1
+
+
+def test_check_is_subtree_when_subtree_then_returns_true(bst):
+    node_70 = TreeNode(value=70, left=None, right=None)
+    node_55 = TreeNode(value=55, left=None, right=None)
+    node_18 = TreeNode(value=18, left=None, right=None)
+    node_80 = TreeNode(value=80, left=None, right=None)
     
+    node_70.left = node_55
+    node_55.left = node_18
+    node_70.right = node_80
+    
+    is_subtree = check_is_subtree(bst, node_70)
+    
+    assert is_subtree is True 
+    
+    
+def test_check_is_subtree_when_not_subtree_then_returns_false(bst):
+    node_70 = TreeNode(value=70, left=None, right=None)
+    node_5 = TreeNode(value=5, left=None, right=None)
+    node_18 = TreeNode(value=18, left=None, right=None)
+    node_80 = TreeNode(value=80, left=None, right=None)
+    
+    node_70.left = node_5
+    node_5.left = node_18
+    node_70.right = node_80
+    
+    is_subtree = check_is_subtree(bst, node_70)
+    
+    assert is_subtree is False 
+    
+    
+def test_get_node_count_when_counted_then_correct(bst):
+    count = get_node_count(bst)
+    
+    assert count == 9
+    
+    
+def test_to_list_when_converted_then_list_as_expected(bst):
+    expected = [12, 7, 3, 1, 8, 70, 55, 18, 80]
+    
+    actual = to_list(bst)
+    
+    assert actual == expected
+    
+    
+def test_get_random_node_when_guessed_then_from_tree(bst):
+    bst_elements = [12, 7, 3, 1, 8, 70, 55, 18, 80]
+    random = get_random_node(bst)
+    
+    assert random in bst_elements
+
+
+def test_get_count_of_sums_when_counted_then_returns_correct_count(with_sums):
+    count = get_count_of_sums(with_sums, 10)
+    
+    assert count == 3
