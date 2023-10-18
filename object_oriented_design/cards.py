@@ -3,6 +3,7 @@ from enum import Enum
 from typing import List
 
 
+# 7.1 - Deck of Cards: Design the data structures for a generic deck of cards.
 class Suit(Enum):
     Spades = 0
     Clubs = 1
