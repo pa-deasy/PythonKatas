@@ -66,3 +66,39 @@ def search_rotated(numbers: List[int], target: int, left: int, right: int) -> in
             location = search_rotated(numbers, target, left, middle - 1)
         else:
             return location
+        
+        
+# 10.4 - Sorted Search, No Size: You are given an array-like data structure Listy which lacks a size method. It does however have a elementAt(i) method that returns the element
+# at index i in O(1) time. If i is beyond the bounds of the data structure, it returns -1(for this reason the data structure only supports positive integers). 
+# Given a Listy which contains, sorted, positive integers, find the index at which and element x occurs. If x occurs multiple times, you may return any index.
+class Listy:
+    values: List[int]
+    
+    def __init__(self, values: List[int]) -> None:
+        self.values = sorted(values)
+    
+    def element_at(self, index: int) -> int:
+        if 0 > index or index > len(self.values) - 1:
+            return -1
+        return self.values[index]
+    
+    def index_of(self, target: int) -> int:
+        index = 1
+        while self.element_at(index) != -1 and self.element_at(index) < target:
+            index *= 2
+        
+        return self.binary_search(target, round(index / 2), index)
+    
+    def binary_search(self, target: int, low: int, high: int) -> int:
+        if low > high:
+            return None
+
+        mid = round((low + high) / 2)
+        if self.element_at(mid) == target:
+            return mid
+        elif self.element_at(mid) < target:
+            return self.binary_search(target, mid + 1, high)
+        else:
+            return self.binary_search(target, low, mid - 1)
+    
+

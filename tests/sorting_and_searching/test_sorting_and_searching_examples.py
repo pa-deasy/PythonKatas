@@ -1,4 +1,4 @@
-from sorting_and_searching.sorting_and_searching_examples import group_anagrams, search_rotated_array, sorted_merge
+from sorting_and_searching.sorting_and_searching_examples import Listy, group_anagrams, search_rotated_array, sorted_merge
 
 
 def test_sorted_merge_when_sorted_then_resulting_array_is_in_order():
@@ -31,3 +31,26 @@ def test_search_rotated_when_repeatative_elements_found_then_returns_index():
     
     assert index == 5
     
+    
+def test_index_of_listy_when_target_exists_then_correct_index_returned():
+    listy = Listy([4, 3, 14, 1, 9, 7])  #[1, 3, 4, 7, 9, 14]
+    
+    index = listy.index_of(7)
+    
+    assert index == 3
+    
+    
+def test_binary_search_when_element_exists_return_index():
+    listy = Listy([1, 2, 3, 4, 5, 6, 7])
+    
+    index = listy.binary_search(4, 0, 6)
+    
+    assert index == 3
+    
+    
+def test_binary_search_when_element_does_not_exist_return_none():
+    listy = Listy([1, 2, 3, 4, 5, 6, 7])
+    
+    index = listy.binary_search(9, 0, 6)
+    
+    assert index is None
