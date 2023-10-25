@@ -1,4 +1,4 @@
-from sorting_and_searching.sorting_and_searching_examples import Listy, group_anagrams, search_rotated_array, sorted_merge
+from sorting_and_searching.sorting_and_searching_examples import Listy, group_anagrams, search_rotated_array, sorted_merge, sparse_search
 
 
 def test_sorted_merge_when_sorted_then_resulting_array_is_in_order():
@@ -52,5 +52,21 @@ def test_binary_search_when_element_does_not_exist_return_none():
     listy = Listy([1, 2, 3, 4, 5, 6, 7])
     
     index = listy.binary_search(9, 0, 6)
+    
+    assert index is None
+    
+    
+def test_sparse_search_when_word_exists_then_index_is_returned():
+    words = ['at', '', '', '', 'ball', '', '', 'car', '', '', 'dad', '', '']
+    
+    index = sparse_search(words, 'ball')
+    
+    assert index == 4
+    
+    
+def test_sparse_search_when_word_does_not_exist_then_none_is_returned():
+    words = ['at', '', '', '', 'ball', '', '', 'car', '', '', 'dad', '', '']
+    
+    index = sparse_search(words, 'patrick')
     
     assert index is None

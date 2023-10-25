@@ -102,3 +102,21 @@ class Listy:
             return self.binary_search(target, low, mid - 1)
     
 
+# 10.5 - Sparse Search: Given a sorted array of strings that is interspersed with empty string, write a method to find the location of a given string.
+# ball -> ['at', '', '', '', 'ball', '', '', 'car', '', '', 'dad', '', ''] -> 4
+def sparse_search(words: List[str], target: str) -> int:
+    low = 0
+    high = len(words) - 1
+    
+    while low <= high:
+        mid = round((low + high) / 2)
+        
+        while not words[mid] and mid < high:
+            mid += 1
+        
+        if words[mid] == target:
+            return mid
+        elif not words[mid] or words[mid] > target:
+            high = mid - 1
+        else:
+            low = mid + 1
