@@ -1,4 +1,5 @@
-from sorting_and_searching.sorting_and_searching_examples import Listy, group_anagrams, search_rotated_array, sorted_merge, sparse_search
+import pytest
+from sorting_and_searching.sorting_and_searching_examples import Listy, check_duplicates, group_anagrams, search_matrix, search_rotated_array, sorted_merge, sparse_search
 
 
 def test_sorted_merge_when_sorted_then_resulting_array_is_in_order():
@@ -70,3 +71,33 @@ def test_sparse_search_when_word_does_not_exist_then_none_is_returned():
     index = sparse_search(words, 'patrick')
     
     assert index is None
+    
+    
+def test_check_duplicates_when_duplicates_exists_then_are_printed():
+    numbers = [34, 32, 80, 29, 1, 2, 3, 4, 5, 6, 7, 8, 9, 100, 283, 833, 554, 1002, 1034, 1932, 2038, 29001, 28833, 27833, 30939, 3, 31383]
+    
+    duplicates = check_duplicates(numbers)
+    
+    assert duplicates == [3]
+    
+    
+@pytest.fixture
+def matrix():
+    return [
+        [1, 2, 3, 4, 5],
+        [6, 7, 8, 9, 10],
+        [11, 12, 13, 14, 15],
+        [16, 17, 18, 19, 20]
+    ]
+    
+def test_search_matrix_when_target_exists_then_matrix_position_returned(matrix):
+    matrix_position = search_matrix(matrix, 14)
+    
+    assert matrix_position.row == 2
+    assert matrix_position.column == 3
+    
+
+def test_search_matrix_when_target_does_not_exist_then_none_returned(matrix):
+    matrix_position = search_matrix(matrix, 309)
+    
+    assert matrix_position is None

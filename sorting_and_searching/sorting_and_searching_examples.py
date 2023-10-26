@@ -120,3 +120,91 @@ def sparse_search(words: List[str], target: str) -> int:
             high = mid - 1
         else:
             low = mid + 1
+            
+
+
+# 10.8 - Find Duplicates: You have an array with all the numbers from 1 to N, where N is at most 32,000. The array may have duplicate entries and you do not know what N is.
+# With only 4 kilobytes of memory available, how would you print all duplicate elements in the array?
+class BitSet():
+    bitset: List[int]
+    
+    def __init__(self, size: int) -> None:
+        self.bitset = [None for i in range((size >> 5) + 1)]
+    
+    def get(self, index: int) -> bool:
+        word_number = index >> 5
+        bit_number = index % 32
+        return (self.bitset[word_number] and (1 << bit_number)) != 0 
+    
+    def set(self, index: int) -> None:
+        word_number = index >> 5
+        bit_number = index % 32
+        self.bitset[word_number] |= 1 << bit_number
+    
+    
+def check_duplicates(numbers: List[int]) -> List[int]:
+    bitset = BitSet(32000)
+    duplicates: List[int] = []
+    
+    for number in numbers:
+        number0 = number - 1
+        if bitset.get(number0):
+            print(f'{number} is a duplicate')
+            duplicates.append(number)
+            
+        else:
+            bitset.set(number0)
+            
+    return duplicates
+
+
+# 10.9 - Sorted Matrix Search: Given an M x N matrix in which each row and each column is sorted in ascending order, write a method to find an element.
+@dataclass
+class MatrixPosition:
+    row: int
+    column: int
+    
+
+def search_matrix(matrix: List[List[int]], target: int) -> MatrixPosition:
+    row = _find_target_row(matrix, target)
+    return _find_target_on_row(matrix, target, row) if row else None
+    
+
+def _find_target_row(matrix: List[List[int]], target: int) -> int:
+    low = 0
+    high = len(matrix) - 2
+    while low <= high:
+        mid = round((low + high) / 2)
+        
+        if matrix[mid][0] <= target and target < matrix[mid + 1][0]:
+            return mid
+        elif matrix[mid][0] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+            
+    return None
+
+
+def _find_target_on_row(matrix: List[List[int]], target: int, row: int) -> MatrixPosition:
+    low = 0
+    high = len(matrix[row]) - 1
+    while low <= high:
+        mid = round((low + high) / 2)
+        
+        if matrix[row][mid] == target:
+            return MatrixPosition(row=row, column=mid)
+        elif matrix[row][mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+    
+    return None
+
+
+        # [1, 2, 3, 4, 5],
+        # [6, 7, 8, 9, 10],
+        # [11, 12, 13, 14, 15],
+        # [16, 17, 18, 19, 20]
+        
+        # 14
