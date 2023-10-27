@@ -202,9 +202,62 @@ def _find_target_on_row(matrix: List[List[int]], target: int, row: int) -> Matri
     return None
 
 
-        # [1, 2, 3, 4, 5],
-        # [6, 7, 8, 9, 10],
-        # [11, 12, 13, 14, 15],
-        # [16, 17, 18, 19, 20]
+# 10.10 Rank from Stream: Imagine you are reading in a stream of integers. Periodically, you wish to be able to look up the rank of a number x(the number of values 
+# less than or equal to x). Implement the data structure and algorithms to support these operations. That is, implement the method track(int x), which is called
+# when each element is generated, and the method getRankOfNumber(int x), which returns the number of values less than or equal to x(not including this instance of x itself).
+class RankNode:
+    left_size: int
+    left: 'RankNode'
+    right: 'RankNode'
+    data: int
+    
+    def __init__(self, data: int) -> None:
+        self.left_size = 0
+        self.left = None
+        self.right = None
+        self.data = data
         
-        # 14
+    def insert(self, d: int) -> None:
+        if d <= self.data:
+            if self.left:
+                self.left.insert(d)
+            else:
+                self.left = RankNode(d)
+            self.left_size += 1
+        else:
+            if self.right:
+                self.right.insert(d)
+            else:
+                self.right = RankNode(d)
+                
+    def get_rank(self, d: int) -> int:
+        if self.data == d:
+            return self.left_size
+        elif d < self.data:
+            return -1 if not self.left else self.left.get_rank(d)
+        else:
+            right_rank = -1 if not self.right else self.right.get_rank(d)
+            return -1 if right_rank == -1 else right_rank  + self.left_size + 1
+            
+        
+
+class DataStream:
+    root_rank_node: RankNode
+    elements: List[int]
+    
+    def __init__(self) -> None:
+        self.root_rank_node = None
+        self.elements = []
+    
+    def track(self, number: int) -> None:
+        if not self.root_rank_node:
+            self.root_rank_node = RankNode(number)
+        else:
+            self.root_rank_node.insert(number)
+        
+        self.elements.append(number)
+        
+    def get_rank_of(self, number: int) -> int:
+        return self.root_rank_node.get_rank(number)
+        
+    

@@ -1,5 +1,5 @@
 import pytest
-from sorting_and_searching.sorting_and_searching_examples import Listy, check_duplicates, group_anagrams, search_matrix, search_rotated_array, sorted_merge, sparse_search
+from sorting_and_searching.sorting_and_searching_examples import DataStream, Listy, RankNode, check_duplicates, group_anagrams, search_matrix, search_rotated_array, sorted_merge, sparse_search
 
 
 def test_sorted_merge_when_sorted_then_resulting_array_is_in_order():
@@ -101,3 +101,58 @@ def test_search_matrix_when_target_does_not_exist_then_none_returned(matrix):
     matrix_position = search_matrix(matrix, 309)
     
     assert matrix_position is None
+    
+
+def test_stream_when_multiple_elements_tracked_then_arranges_tree_in_sorted_order():
+    stream = DataStream()
+    
+    stream.track(20)
+    stream.track(15)
+    stream.track(10)
+    stream.track(5)
+    stream.track(13)
+    stream.track(25)
+    stream.track(23)
+    stream.track(24)
+    
+    assert stream.root_rank_node.data == 20
+    assert stream.root_rank_node.left.data == 15
+    assert stream.root_rank_node.left.left.data == 10
+    assert stream.root_rank_node.left.left.left.data == 5
+    assert stream.root_rank_node.left.left.right.data == 13
+    assert stream.root_rank_node.right.data == 25
+    assert stream.root_rank_node.right.left.data == 23
+    assert stream.root_rank_node.right.left.right.data == 24
+    
+    
+def test_stream_when_rank_obtained_for_existing_element_then_rank_is_correct_count():
+    stream = DataStream()
+    stream.track(20)
+    stream.track(15)
+    stream.track(10)
+    stream.track(5)
+    stream.track(13)
+    stream.track(25)
+    stream.track(23)
+    stream.track(24)
+    
+    assert stream.get_rank_of(24) == 6
+    assert stream.get_rank_of(10) == 1
+    assert stream.get_rank_of(15) == 3
+    
+    
+def test_stream_when_rank_obtained_for_non_existing_element_then_rank_is_negative_one():
+    stream = DataStream()
+    stream.track(20)
+    stream.track(15)
+    stream.track(10)
+    stream.track(5)
+    stream.track(13)
+    stream.track(25)
+    stream.track(23)
+    stream.track(24)
+    
+    assert stream.get_rank_of(1) == -1
+    assert stream.get_rank_of(17) == -1
+    assert stream.get_rank_of(55) == -1
+    
