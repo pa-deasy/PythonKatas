@@ -261,3 +261,56 @@ class DataStream:
         return self.root_rank_node.get_rank(number)
         
     
+# 10.11 - Peaks and Valleys: In an array of integers, a "peek" is an element which is greater than or equal to the adjacent integers and a "valley" is an element which is
+# less than or equal to the adjacent integers. For example in the array [5, 8, 6, 2, 3, 4, 6], [8, 6] are peaks and [5, 2] are valleys.
+# Given an array of integers, sort the array into an alternating sequence of peaks and valleys.
+# [5, 3, 1, 2, 3] -> [5, 1, 3, 2, 3],  [5, 3] are peaks [1] are valleys
+def sort_to_alternating(heights: List[int]) -> List[int]:
+    for index in range(1, len(heights) - 1, 2):
+        biggest_index = _max_index(heights, index - 1, index, index + 1)
+        if index != biggest_index:
+            heights[index], heights[biggest_index] = heights[biggest_index], heights[index]
+            
+    return heights
+        
+
+def _max_index(heights: List[int], left_index: int, middle_index: int, right_index: int) -> int:
+    left = None if left_index < 0 else heights[left_index]
+    middle = heights[middle_index]
+    right = None if right_index > len(heights) - 1 else heights[right_index]
+    
+    if left and left > middle and (not right or left > right):
+        return left_index
+    elif right and right > middle and (not left or right > left):
+        return right
+    else:
+        middle
+        
+        
+def less_optimal_sort_to_alternating(heights: List[int]) -> List[int]:
+    peaks: List[int] = []
+    valleys: List[int] = []
+    neither: List[int] = []
+    
+    for index in range(len(heights)):
+        current = heights[index]
+        left = heights[index - 1] if index > 0 else None
+        right = heights[index + 1] if index < len(heights) - 1 else None
+        if (not left or left <= current) and (not right or current >= right):
+            peaks.append(current)
+        elif (not left or left >= current) and (not right or current <= right):
+            valleys.append(current)
+        else:
+            neither.append(current)
+            
+    bigger, smaller = (peaks, valleys) if len(peaks) > len(valleys) else (valleys, peaks)
+    
+    sorted: List[int] = []
+    while bigger:
+        sorted.append(bigger.pop(0))
+        if smaller:
+            sorted.append(smaller.pop(0))
+    
+    sorted += neither
+    
+    return sorted

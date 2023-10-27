@@ -1,5 +1,5 @@
 import pytest
-from sorting_and_searching.sorting_and_searching_examples import DataStream, Listy, RankNode, check_duplicates, group_anagrams, search_matrix, search_rotated_array, sorted_merge, sparse_search
+from sorting_and_searching.sorting_and_searching_examples import DataStream, Listy, RankNode, check_duplicates, group_anagrams, search_matrix, search_rotated_array, sort_to_alternating, sorted_merge, sparse_search
 
 
 def test_sorted_merge_when_sorted_then_resulting_array_is_in_order():
@@ -155,4 +155,12 @@ def test_stream_when_rank_obtained_for_non_existing_element_then_rank_is_negativ
     assert stream.get_rank_of(1) == -1
     assert stream.get_rank_of(17) == -1
     assert stream.get_rank_of(55) == -1
+
+
+def test_sort_to_alternating_when_sorted_then_alternating_peaks_and_valleys_returned():
+    heights = [5, 3, 1, 2, 3] 
+    expected = [3, 5, 1, 2, 3]
     
+    actual = sort_to_alternating(heights)
+    
+    assert actual == expected
