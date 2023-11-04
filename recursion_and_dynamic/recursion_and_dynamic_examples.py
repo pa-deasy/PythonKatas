@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Set
 
 
 def fibonacci(i: int, memo: Dict[int, int] = {}) -> int:
@@ -114,3 +114,20 @@ def find_magic_index_with_duplicates(numbers: List[int], low: int, high: int) ->
     right_index = max(mid + 1, mid_value)
     right = find_magic_index_with_duplicates(numbers, right_index, high)
     return right
+
+
+# 8.4 - Power Set: Write a method to return all subsets of a set
+def all_subsets_of(numbers: List[int], subsets: List[List[int]] = [[]]) -> List[List[int]]:
+    if not numbers:
+        return subsets
+    
+    n = numbers.pop(0)
+    new_subsets = []
+    for s in subsets:
+        new = s.copy()
+        new.append(n)
+        new_subsets.append(new)
+    
+    return all_subsets_of(numbers, subsets + new_subsets)
+    
+    

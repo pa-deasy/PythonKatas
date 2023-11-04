@@ -1,4 +1,5 @@
-from recursion_and_dynamic.recursion_and_dynamic_examples import RobotGrid, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates
+from typing import Set
+from recursion_and_dynamic.recursion_and_dynamic_examples import RobotGrid, all_subsets_of, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates
 
 
 def test_fibonacci_when_calculated_then_result_is_as_expected():
@@ -41,3 +42,37 @@ def test_find_magic_index_with_duplicates_when_one_exists_then_returns_index():
     magic_index = find_magic_index_with_duplicates(numbers, 0, len(numbers) - 1)
     
     assert magic_index == 2
+    
+    
+def test_all_subsets_of_when_empty_set_then_returns_expected_list_of_subsets():
+    expected = [[]]
+    
+    subsets = all_subsets_of([])
+    
+    assert subsets == expected
+    
+
+def test_all_subsets_of_when_singe_num_in_set_then_returns_expected_list_of_subsets():
+    expected = [[], [9]]
+    
+    subsets = all_subsets_of([9])
+    
+    assert subsets == expected
+    
+    
+def test_all_subsets_of_when_two_nums_in_set_then_returns_expected_list_of_subsets():
+    expected = [[], [9], [1], [9, 1]]
+    
+    subsets = all_subsets_of([9, 1])
+    
+    assert subsets == expected
+    
+    
+def test_all_subsets_of_when_three_nums_in_set_then_returns_expected_list_of_subsets():
+    expected = [[], [9], [1], [9, 1], [5], [9, 5], [1, 5], [9, 1, 5]]
+    
+    subsets = all_subsets_of([9, 1, 5])
+    
+    assert subsets == expected
+
+    
