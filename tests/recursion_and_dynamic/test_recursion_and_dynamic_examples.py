@@ -1,5 +1,5 @@
 from typing import Set
-from recursion_and_dynamic.recursion_and_dynamic_examples import RobotGrid, all_subsets_of, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates
+from recursion_and_dynamic.recursion_and_dynamic_examples import RobotGrid, Tower, all_subsets_of, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates, recurse_multiply_efficient, recursive_multiply
 
 
 def test_fibonacci_when_calculated_then_result_is_as_expected():
@@ -76,3 +76,27 @@ def test_all_subsets_of_when_three_nums_in_set_then_returns_expected_list_of_sub
     assert subsets == expected
 
     
+def test_recursive_multiply_when_multiplied_then_returns_expected_answer():
+    assert recursive_multiply(4, 5) == 20
+    
+
+def test_recursive_multiply_efficient_when_multiplied_then_returns_expected_answer():
+    assert recurse_multiply_efficient(7, 5) == 35
+    
+    
+def test_hanoi_towers_when_disks_moved_to_last_tower_then_last_tower_ordered_as_expected():
+    tower_a = Tower()
+    tower_b = Tower()
+    tower_c = Tower()
+    
+    tower_a.add(5)
+    tower_a.add(4)
+    tower_a.add(3)
+    tower_a.add(2)
+    tower_a.add(1)
+    
+    tower_a.move_disks(5, tower_c, tower_b)
+    
+    assert tower_a.disks.is_empty() is True
+    assert tower_b.disks.is_empty() is True
+    assert tower_c.disks.peek() == 1

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 
 # 10.1 - Sorted Merge: You are given two sorted arrays, A and B, where A has a large enough buffer at the end to hold B.
@@ -159,10 +159,34 @@ def check_duplicates(numbers: List[int]) -> List[int]:
 
 
 # 10.9 - Sorted Matrix Search: Given an M x N matrix in which each row and each column is sorted in ascending order, write a method to find an element.
-@dataclass
 class MatrixPosition:
     row: int
     column: int
+    row_max: int
+    column_max: int
+    
+    def __init__(self, row_max: int, column_max: int) -> None:
+        self.row = 0
+        self.column = column_max
+        self.row_max = row_max
+    
+    def is_valid(self) -> bool:
+        return self.column >= 0 and self.row <= self.row_max
+    
+    
+def search_sorted_matrix(matrix: List[List[int]], target: int) -> Optional[MatrixPosition]:
+    position = MatrixPosition(row_max=len(matrix) - 1, column_max=len(matrix[0]) - 1)
+    
+    while position.is_valid():
+        value = matrix[position.row][position.column]
+        if value == target:
+            return position
+        elif value > target:
+            position.column -= 1
+        else:
+            position.row += 1
+            
+    return None
     
 
 def search_matrix(matrix: List[List[int]], target: int) -> MatrixPosition:

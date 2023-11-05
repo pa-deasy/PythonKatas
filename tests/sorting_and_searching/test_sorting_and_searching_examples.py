@@ -1,5 +1,5 @@
 import pytest
-from sorting_and_searching.sorting_and_searching_examples import DataStream, Listy, RankNode, check_duplicates, group_anagrams, search_matrix, search_rotated_array, sort_to_alternating, sorted_merge, sparse_search
+from sorting_and_searching.sorting_and_searching_examples import DataStream, Listy, check_duplicates, group_anagrams, search_matrix, search_rotated_array, search_sorted_matrix, sort_to_alternating, sorted_merge, sparse_search
 
 
 def test_sorted_merge_when_sorted_then_resulting_array_is_in_order():
@@ -79,6 +79,29 @@ def test_check_duplicates_when_duplicates_exists_then_are_printed():
     duplicates = check_duplicates(numbers)
     
     assert duplicates == [3]
+    
+    
+@pytest.fixture
+def sorted_matrix():
+    return [
+        [15, 20, 40, 85],
+        [20, 35, 80, 95],
+        [30, 55, 95, 105],
+        [40, 80, 100, 120]
+    ]
+    
+    
+def test_search_sorted_matrix_when_target_exists_then_matrix_position_returned(sorted_matrix):
+    matrix_position = search_sorted_matrix(sorted_matrix, 55)
+    
+    assert matrix_position.column == 1
+    assert matrix_position.row == 2
+    
+
+def test_search_sorted_matrix_when_target__does_not_exist_then_none_returned(sorted_matrix):
+    matrix_position = search_sorted_matrix(sorted_matrix, 57)
+    
+    assert matrix_position is None
     
     
 @pytest.fixture

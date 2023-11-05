@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Optional, Set
 
+from stacks_and_queues.stacks_and_queues_examples import Stack
+
 
 def fibonacci(i: int, memo: Dict[int, int] = {}) -> int:
     if i == 0 or i == 1:
@@ -130,4 +132,65 @@ def all_subsets_of(numbers: List[int], subsets: List[List[int]] = [[]]) -> List[
     
     return all_subsets_of(numbers, subsets + new_subsets)
     
+    
+# 8.5 - Recursive Multipy: Write a recursive function to multiply two positive integers without using the * operator. You can use addition, subtraction and bit shifting,
+# but you should minimize the number of those operations.
+def recursive_multiply(a: int, b: int, sum: int = 0) -> int:
+    if b == 0:
+        return sum
+    
+    return recursive_multiply(a, b - 1, sum + a)
+
+
+def recurse_multiply_efficient(a: int, b: int) -> int:
+    smaller, bigger = (a, b) if a < b else (b, a)
+    return _recurse_multiply_efficient(smaller, bigger)
+
+
+def _recurse_multiply_efficient(smaller: int, bigger: int) -> int:
+    if smaller == 0:
+        return 0
+    
+    if smaller == 1:
+        return bigger
+    
+    s = round(smaller / 2)
+    half_prod = _recurse_multiply_efficient(s, bigger)
+    
+    if smaller % 2 == 0:
+        return half_prod + half_prod
+    else:
+        return half_prod + half_prod + bigger 
+    
+
+# 8.6 - Towers of Hanoi: In the classic problem of the Towers of Hanoi, you have 3 towers and N disks of different sizes which can slide ont any tower. The puzzle starts 
+# with disks sorted in ascending order of size from top to bottom (i.e each disk sits on top of an even larger one). You have the following constraints:
+# 1. Only one disk can be moved at a time.
+# 2. A disk is slid off the top of one tower and onto another tower.
+# 3. A disk cannot be placed on top of a smaller disk.
+# Write a program to move the disks from the first tower to the last using Stacks.
+class Tower:
+    disks: Stack
+    
+    def __init__(self) -> None:
+        self.disks = Stack()
+        
+    def add(self, d: int) -> None:
+        if not self.disks.is_empty() and self.disks.peek() <= d:
+            raise Exception('Disk cannot be placed on a smaller disk')
+        else:
+            self.disks.push(d)
+            
+    def move_top_to(self, t: 'Tower') -> None:
+        top = self.disks.pop()
+        t.add(top)
+        
+    def move_disks(self, quantity: int, destination: 'Tower', buffer: 'Tower') -> None:
+        if quantity <= 0:
+            return
+        
+        self.move_disks(quantity - 1, buffer, destination)
+        self.move_top_to(destination)
+        buffer.move_disks(quantity - 1, destination, self)
+        
     
