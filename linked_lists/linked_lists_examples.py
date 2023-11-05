@@ -1,10 +1,10 @@
 from dataclasses import dataclass
-from typing import List, Set
+from typing import Any, List, Set
 
 
 @dataclass
 class Node:
-    value: int
+    value: Any
     next: 'Node' 
     
     
@@ -17,7 +17,7 @@ class LastNodeDetails:
 class LinkedList:
     head: Node
     
-    def __init__(self, head: Node) -> None:
+    def __init__(self, head: Node = None) -> None:
         self.head = head
         
     # 2.1 - Remove Dups: Write code to remove duplicates from an unsorted linked list.
