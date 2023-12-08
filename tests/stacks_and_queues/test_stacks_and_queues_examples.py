@@ -28,7 +28,7 @@ def test_multistack_when_operated_on_then_behaves_as_expected():
     assert stack.peek(stack_number=2) == 22
     
     assert stack.is_full(2) is True
-    assert stack.pop(2) is 22
+    assert stack.pop(2) == 22
     assert stack.peek(2) == 21
     stack.push(stack_number=2, value=23)
     assert stack.peek(2) == 23

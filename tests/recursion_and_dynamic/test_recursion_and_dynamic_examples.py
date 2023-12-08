@@ -1,5 +1,5 @@
 from typing import Set
-from recursion_and_dynamic.recursion_and_dynamic_examples import RobotGrid, Tower, all_subsets_of, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates, recurse_multiply_efficient, recursive_multiply
+from recursion_and_dynamic.recursion_and_dynamic_examples import RobotGrid, Tower, all_permutations, all_permutations_with_dups, all_subsets_of, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates, recurse_multiply_efficient, recursive_multiply
 
 
 def test_fibonacci_when_calculated_then_result_is_as_expected():
@@ -100,3 +100,21 @@ def test_hanoi_towers_when_disks_moved_to_last_tower_then_last_tower_ordered_as_
     assert tower_a.disks.is_empty() is True
     assert tower_b.disks.is_empty() is True
     assert tower_c.disks.peek() == 1
+    
+
+def test_all_permutations_when_permutations_generated_then_they_match_expected_list():
+    word = 'bud'
+    expected = ['bud', 'bdu', 'ubd', 'udb', 'dbu', 'dub']
+    
+    actual = all_permutations(word)
+    
+    assert actual == expected
+    
+    
+def test_all_permutations_with_dups_when_permutations_generated_then_they_match_expected_list():
+    word = 'buud'
+    expected = ['buud', 'budu', 'bduu', 'ubud', 'ubdu', 'uubd', 'uudb', 'udbu', 'udub', 'dbuu', 'dubu', 'duub']
+    
+    actual = all_permutations_with_dups(word)
+    
+    assert actual == expected

@@ -1,10 +1,10 @@
-# O(N) - iterating the array twice doesn't matter
 import math
 import string
 from typing import Optional
 from big_o.node import Node
 
 
+# O(N) - iterating the array twice doesn't matter
 def foo_sum_product(numbers: list[int]) -> tuple[int, int]:
     sum = 0
     product = 1

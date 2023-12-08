@@ -1,15 +1,16 @@
 from dataclasses import dataclass
-from enum import Enum
+from enum import Enum, IntEnum
+from math import sqrt
 from typing import Dict, List
 
 from linked_lists.linked_lists_examples import LinkedList
 
 
-class Orientation(Enum):
-    LEFT = 'left'
-    TOP = 'top'
-    RIGHT = 'right'
-    BOTTOM = 'bottom'
+class Orientation(IntEnum):
+    LEFT = 1
+    TOP = 2
+    RIGHT = 3
+    BOTTOM = 4
     
     def get_opposite(self) -> 'Orientation':
         if self == Orientation.LEFT:
@@ -40,7 +41,7 @@ class Shape(Enum):
 
 @dataclass
 class Edge:
-    orientation: Orientation
+    id: int
     shape: Shape
     parent_piece: 'Piece'
     
@@ -52,25 +53,33 @@ class Piece:
     edges: Dict[Orientation, Edge]
     
     def rotate_edges(self, rotations: int) -> None:
-        return None
+        while rotations > 0:
+            left = self.edges[Orientation.LEFT]
+            self.edges[Orientation.LEFT] = self.edges[Orientation.BOTTOM]
+            self.edges[Orientation.BOTTOM] = self.edges[Orientation.RIGHT]
+            self.edges[Orientation.RIGHT] = self.edges[Orientation.TOP]
+            self.edges[Orientation.TOP] = left
     
     def set_edge_as_orientation(self, edge: Edge, orientation: Orientation) -> None:
-        other = self.edges.get(orientation)
-        opposite = other.orientation.get_opposite()
-        other.orientation = opposite
-        self.edges[opposite] = other
-        self.edges[orientation] = edge
-    
+        current_orientation = [o for (o, e) in self.edges.items() if e == edge]
+        rotation_diff = orientation - current_orientation if orientation >= current_orientation else orientation + 4 - current_orientation
+        
+        self.rotate_edges(rotation_diff)
+        
 
 class Puzzle:
     pieces: LinkedList[Piece]
+    matching_edges: Dict[int, int]
     solution: List[List[Piece]]
     size: int
     
-    def __init__(self, pieces: List[Piece], solution: List[List[Piece]], size: int) -> None:
+    def __init__(self, pieces: List[Piece], matching_edges: Dict[int, int], size: int) -> None:
         self.pieces = pieces
-        self.solution = solution
-        self.size = size
+        self.matching_edges = matching_edges
+        row = [None] * size
+        rows = row * size
+        self.solution = rows
+        self.size = sqrt(len(pieces))
         
     def solve(self) -> List[List[Piece]]:
         corner_pieces = LinkedList()
@@ -84,18 +93,25 @@ class Puzzle:
                 self._fit_next_edge(pieces_to_search, row, column)
 
         return self.solution
-        
-    def _set_edge_in_solution(self, pieces: LinkedList, edge: Edge, row: int, column: int, orientation: Orientation) -> None:
-        piece = edge.parent_piece
-        piece.set_edge_as_orientation(edge, orientation)
-        pieces.delete_node(piece)
-        self.solution[row][column] = piece
-        
-    def _orient_top_left_corner(self, piece: Piece) -> None:
-        return
     
-    def _get_matching_edge(self, edge_to_match: Edge, pieces_to_search: LinkedList) -> Edge:
-        return Edge()
+    def _group_pieces(self, corner_pieces: LinkedList, border_pieces: LinkedList, inside_pieces: LinkedList) -> None:
+            for piece in self.pieces:
+                flat_edges_count = len([e.shape for e in piece.edges if e.shape == Shape.FLAT])
+                
+                if flat_edges_count == 2:
+                    corner_pieces.add(piece)
+                elif flat_edges_count == 1:
+                    border_pieces.add(piece)
+                else: 
+                    inside_pieces.add(piece)
+    
+    def _get_pieces_to_search(self, corner_pieces: LinkedList, border_pieces: LinkedList, inside_pieces: LinkedList, row: int, column: int) -> LinkedList:
+        if (row == 0 and (column == 0 or column == self.size - 1)) or (row == self.size - 1 and (column == 0 or column == self.size - 1)):
+            return corner_pieces
+        elif row == 0 or row == self.size - 1 or column == 0 or column == self.size - 1:
+            return border_pieces
+        else:
+            return inside_pieces
         
     def _fit_next_edge(self, pieces_to_search: LinkedList, row: int, column: int) -> None:
         if row == 0 and column == 0:
@@ -114,9 +130,27 @@ class Puzzle:
             orientation = orientation_to_match.get_opposite()
             self._set_edge_in_solution(pieces_to_search, edge, row, column, orientation)
             
-    def _group_pieces(corner_pieces: LinkedList, border_pieces: LinkedList, inside_pieces: LinkedList) -> None:
+    def _orient_top_left_corner(self, piece: Piece) -> None:
+        # find 2 flad edges and place them to match the outside of puzzle
         return
     
-    def _get_pieces_to_search(corner_pieces: LinkedList, border_pieces: LinkedList, inside_pieces: LinkedList, row: int, column: int) -> LinkedList:
-        return LinkedList()
+    def _get_matching_edge(self, edge_to_match: Edge, pieces_to_search: LinkedList) -> Edge:
+        matching_id = self.matching_edges.get(edge_to_match.id)
+        for p in pieces_to_search:
+            for edge in p.edges:
+                if edge.id == matching_id:
+                    return edge
+        return None
+        
+    def _set_edge_in_solution(self, pieces: LinkedList, edge: Edge, row: int, column: int, orientation: Orientation) -> None:
+        piece = edge.parent_piece
+        piece.set_edge_as_orientation(edge, orientation)
+        pieces.delete_node(piece)
+        self.solution[row][column] = piece
+        
+    
+        
+    
+            
+    
     

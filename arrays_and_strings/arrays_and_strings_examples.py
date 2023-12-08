@@ -216,7 +216,7 @@ def rotate(matrix: list[list[int]]) -> list[list[int]]:
         first = layer
         last = n - 1 - layer
         for index in range(first, last):
-            offset = index - first
+            offset = index - layer
             top = matrix[first][index]
             
             # left -> top

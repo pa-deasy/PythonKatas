@@ -193,4 +193,68 @@ class Tower:
         self.move_top_to(destination)
         buffer.move_disks(quantity - 1, destination, self)
         
+
+# 8.7 - Permutations Without Dups: Write a method to compute all permutations of a string of unique characters.
+def all_permutations(word: str) -> List[str]:
+    return _all_permutations(word, '', [])
+
+
+def _all_permutations(remaining: str, prefix: str, permutations: List[str]) -> List[str]:
+    if not remaining:
+        permutations.append(prefix)
+        return permutations
     
+    for index in range(len(remaining)):
+        new_remaining = remaining[:index] + remaining[index + 1:]
+        new_prefix = prefix + remaining[index]
+        _all_permutations(new_remaining, new_prefix, permutations)
+        
+    return permutations
+
+
+def _other_all_permutations(remaining: str, prefix: str, permutations: List[str]) -> List[str]:
+    if not remaining:
+        permutations.append(prefix)
+        return permutations
+    
+    popped = remaining[:1]
+    new_remaining = remaining[1:]
+    
+    if not prefix:
+        return _all_permutations(new_remaining, popped, permutations)
+    
+    for index in range(len(prefix) + 1):
+        new_prefix = prefix[:index] + popped + prefix[index:]
+        _all_permutations(new_remaining, new_prefix, permutations)
+        
+    return permutations
+
+
+# 8.8: Permutations With Dups: Write a method to compute all permutations of a string whose characters are not necessarily unique.
+# The list should not have duplicate.
+def all_permutations_with_dups(word: str) -> List[str]:
+    char_counts = _get_char_counts(word)
+    return _all_permutations_with_dups(char_counts, '', len(word), [])
+
+
+def _all_permutations_with_dups(char_count: Dict[str, int], prefix: str, remaining: int, permutations: List[str]) -> List[str]:
+    if remaining == 0:
+        permutations.append(prefix)
+        return permutations
+    
+    for c in char_count.keys():
+        count = char_count.get(c)
+        if count > 0:
+            char_count[c] = count - 1
+            _all_permutations_with_dups(char_count, prefix + c, remaining - 1, permutations)
+            char_count[c] = count
+        
+    return permutations
+
+def _get_char_counts(word: str) -> Dict[str, int]:
+    char_counts: Dict[str: int] = {}
+    for char in list(word):
+        count = char_counts.get(char)
+        char_counts[char] = 1 if not count else count + 1
+        
+    return char_counts
