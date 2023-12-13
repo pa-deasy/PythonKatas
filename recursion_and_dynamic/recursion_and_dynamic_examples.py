@@ -230,7 +230,7 @@ def _other_all_permutations(remaining: str, prefix: str, permutations: List[str]
     return permutations
 
 
-# 8.8: Permutations With Dups: Write a method to compute all permutations of a string whose characters are not necessarily unique.
+# 8.8 - Permutations With Dups: Write a method to compute all permutations of a string whose characters are not necessarily unique.
 # The list should not have duplicate.
 def all_permutations_with_dups(word: str) -> List[str]:
     char_counts = _get_char_counts(word)
@@ -258,3 +258,28 @@ def _get_char_counts(word: str) -> Dict[str, int]:
         char_counts[char] = 1 if not count else count + 1
         
     return char_counts
+
+
+# 8.9 - Parens: Implement an algorithm to print all valid (e.g. properly opened and closed) combinations of n pairs of parentheses.
+# Input 3 -> ((())), (()()), (())(), ()(()), ()()()
+def parens_permutations(parens_count: int, parens: List[str] = None) -> List[str]:
+    parens: List[str] = []
+    
+    _add_paren(parens, parens_count, parens_count, '')
+    
+    return parens
+    
+    
+def _add_paren(parens: List[str], left_rem: int, right_rem: int, current: str) -> None:
+    if left_rem < 0 or right_rem < left_rem:
+        return 
+    elif left_rem == 0 and right_rem == 0:
+        parens.append(current)
+        return
+    
+    
+    add_left = current + '('
+    _add_paren(parens, left_rem - 1, right_rem, add_left)
+    
+    add_right = current + ')'
+    _add_paren(parens, left_rem, right_rem - 1, add_right)

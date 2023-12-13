@@ -1,5 +1,5 @@
 from typing import Set
-from recursion_and_dynamic.recursion_and_dynamic_examples import RobotGrid, Tower, all_permutations, all_permutations_with_dups, all_subsets_of, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates, recurse_multiply_efficient, recursive_multiply
+from recursion_and_dynamic.recursion_and_dynamic_examples import RobotGrid, Tower, all_permutations, all_permutations_with_dups, all_subsets_of, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates, parens_permutations, recurse_multiply_efficient, recursive_multiply
 
 
 def test_fibonacci_when_calculated_then_result_is_as_expected():
@@ -116,5 +116,13 @@ def test_all_permutations_with_dups_when_permutations_generated_then_they_match_
     expected = ['buud', 'budu', 'bduu', 'ubud', 'ubdu', 'uubd', 'uudb', 'udbu', 'udub', 'dbuu', 'dubu', 'duub']
     
     actual = all_permutations_with_dups(word)
+    
+    assert actual == expected
+
+
+def test_parens_permutations_when_generated_then_match_expected_list():
+    expected = ['((()))', '(()())', '(())()', '()(())', '()()()']
+    
+    actual = parens_permutations(3)
     
     assert actual == expected
