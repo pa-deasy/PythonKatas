@@ -379,3 +379,84 @@ def _permutations_of_cents(total_cents: int, coins: Coins, permutations: List[Co
 
     with_quarters = Coins(pennies=coins.pennies, nickels=coins.nickels, dimes=coins.dimes, quarters=coins.quarters + 1)
     _permutations_of_cents(total_cents - 25, with_quarters, permutations)
+
+
+# 8.12 - Eight Queens: Write an algorithm to print all the ways of arranging eight queens on an 8 x 8 chess board so that none of them share the same row, column, or diagonal.
+# In this case diagonal means all diagonals, not just the two that bisect the board.
+GRID_SIZE = 8
+
+def permutations_of_queens() -> List[List[int]]:
+    columns = [None] * GRID_SIZE
+    permutations: List[List[int]] = []
+    _permutations_of_queens(0, columns, permutations)
+    
+    return permutations
+    
+    
+def _permutations_of_queens(row: int, columns: List[int], permuations: List[List[int]]) -> None:
+    if row == GRID_SIZE:
+        permuations.append(list(columns))
+        return
+    
+    for column in range(GRID_SIZE):
+        if _check_is_valid(row, column, columns):
+            columns[row] = column
+            _permutations_of_queens(row + 1, columns, permuations)
+        
+        
+def _check_is_valid(row: int, column: int, columns: List[int]) -> bool:
+    for other_row in range(0, row):
+        other_column = columns[other_row]
+        
+        if column == other_column:
+            return False
+        
+        column_diff = abs(other_column - column)
+        row_diff = abs(row - other_row)
+        
+        if column_diff == row_diff:
+            return False
+        
+    return True
+    
+
+# 8.13 - Stack of Boxes: You have a stack of n boxes, with widths w, heights h, and depts d. The boxes cannot be rotated and can only be stacked on
+# top of one another if each box in the stack is strictly larger than the box above it in width, height and depth. Implement a method to compute the height
+# of the tallest possible stack. The height of the stack is the sum of the heights of each box.
+@dataclass
+class Box:
+    width: int
+    height: int
+    dept: int
+
+def calculate_highest_stack(boxes: List[Box]) -> int:
+    boxes.sort(key=lambda b: b.height, reverse=True)
+    
+    max_height = 0
+    stack_map: List[int] = [None] * len(boxes)
+    for index in range(len(boxes)):
+        height = _calculate_highest_stack(boxes, index, stack_map)
+        max_height = max(max_height, height)
+        
+    return max_height
+        
+    
+def _calculate_highest_stack(boxes: List[Box], bottom_index: int, stack_map: List[int]) -> int:
+    if stack_map[bottom_index] is not None:
+        return stack_map[bottom_index]
+    
+    bottom = boxes[bottom_index]
+    max_height = 0
+    
+    for index in range(bottom_index + 1, len(boxes)):
+        if _can_be_above(boxes[index], bottom):
+            height = _calculate_highest_stack(boxes, index, stack_map)
+            max_height = max(max_height, height)
+    
+    max_height += bottom.height
+    stack_map[bottom_index] = max_height
+    return max_height
+    
+
+def _can_be_above(top: Box, bottom: Box) -> bool:
+    return top.width < bottom.width and top.height < bottom.height and top.dept < bottom.dept

@@ -1,6 +1,6 @@
 import pytest
 from typing import Set
-from recursion_and_dynamic.recursion_and_dynamic_examples import Canvas, Point, RobotGrid, Tower, all_permutations, all_permutations_with_dups, all_subsets_of, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates, parens_permutations, permutations_of_cents, recurse_multiply_efficient, recursive_multiply
+from recursion_and_dynamic.recursion_and_dynamic_examples import Box, Canvas, Point, RobotGrid, Tower, all_permutations, all_permutations_with_dups, all_subsets_of, calculate_highest_stack, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates, parens_permutations, permutations_of_cents, permutations_of_queens, recurse_multiply_efficient, recursive_multiply
 
 
 def test_fibonacci_when_calculated_then_result_is_as_expected():
@@ -167,3 +167,24 @@ def test_permutations_of_cents_when_all_permutations_generated_then_match_expect
     permutations = permutations_of_cents(25)
 
     assert len(permutations) == 13
+
+
+def test_permutations_of_queens_when_all_permutations_generated_then_match_expected_count():
+    permutations = permutations_of_queens()
+    
+    assert len(permutations) == 92
+    
+    
+def test_calculate_highest_stack_when_calculated_then_returns_correct_height():
+    box_1 = Box(width=7, height=7, dept=7)
+    box_2 = Box(width=7, height=6, dept=7)
+    box_3 = Box(width=5, height=3, dept=4)
+    box_4 = Box(width=6, height=3, dept=8)
+    box_5 = Box(width=2, height=1, dept=2)
+    
+    boxes = [box_4, box_1, box_3, box_2, box_5]
+    
+    height = calculate_highest_stack(boxes)
+    
+    assert height == 11
+    
