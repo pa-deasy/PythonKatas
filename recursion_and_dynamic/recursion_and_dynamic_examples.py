@@ -283,3 +283,99 @@ def _add_paren(parens: List[str], left_rem: int, right_rem: int, current: str) -
     
     add_right = current + ')'
     _add_paren(parens, left_rem, right_rem - 1, add_right)
+    
+    
+# 8.10 - Paint Fill: Implement the "paint fill" function that one might see on many image editing programs.
+# That is, given a screen (represented by a two-dimensional array of colors), a point, and a new color,
+# fill in the surrounding area until the color changes from the original color.
+@dataclass
+class Point:
+    y: int
+    x: int
+
+    def is_on_canvas(self, size: int) -> bool:
+        return 0 <= self.y < size and 0 <= self.x < size
+
+    def above(self) -> 'Point':
+        return Point(self.y - 1, self.x)
+
+    def below(self) -> 'Point':
+        return Point(self.y + 1, self.x)
+
+    def left(self) -> 'Point':
+        return Point(self.y, self.x - 1)
+
+    def right(self) -> 'Point':
+        return Point(self.y, self.x + 1)
+
+
+class Canvas:
+    size: int
+    layout: List[List[str]]
+
+    def __init__(self, size: int) -> None:
+        self.size = size
+
+        rows = []
+        for index in range(size):
+            row = [None] * size
+            rows.append(row)
+
+        self.layout = rows
+
+    def fill_with_color(self, color: str, point: Point) -> None:
+        old_color = self.layout[point.y][point.x]
+        if old_color == color:
+            return
+
+        self._fill_with_color(color, old_color, point)
+
+    def _fill_with_color(self, color: str, old_color: str, point: Point) -> None:
+        if not point.is_on_canvas(self.size) or self.layout[point.y][point.x] != old_color:
+            return
+
+        self.layout[point.y][point.x] = color
+
+        self._fill_with_color(color, old_color, point.above())
+        self._fill_with_color(color, old_color, point.below())
+        self._fill_with_color(color, old_color, point.left())
+        self._fill_with_color(color, old_color, point.right())
+
+
+# 8.11 - Coins: Given an infinite number of quarters(25 cents), dimes(10 cents), nickels(5 cents), and pennies(1 cent),
+# write code to calculate the number of ways of representing n cents.
+@dataclass
+class Coins:
+    pennies: int = 0
+    nickels: int = 0
+    dimes: int = 0
+    quarters: int = 0
+
+
+def permutations_of_cents(total_cents: int) -> List[Coins]:
+    permutations: List[Coins] = []
+    _permutations_of_cents(total_cents, Coins(), permutations)
+
+    return permutations
+
+
+def _permutations_of_cents(total_cents: int, coins: Coins, permutations: List[Coins]) -> None:
+    if total_cents < 0:
+        return
+
+    if total_cents == 0:
+        if coins not in permutations:
+            permutations.append(coins)
+        return
+
+    with_penny = Coins(pennies=coins.pennies + 1, nickels=coins.nickels, dimes=coins.dimes, quarters=coins.quarters)
+    _permutations_of_cents(total_cents - 1, with_penny, permutations)
+
+    with_nickel = Coins(pennies=coins.pennies, nickels=coins.nickels + 1, dimes=coins.dimes, quarters=coins.quarters)
+    _permutations_of_cents(total_cents - 5, with_nickel, permutations)
+
+    with_dimes = Coins(pennies=coins.pennies, nickels=coins.nickels, dimes=coins.dimes + 1, quarters=coins.quarters)
+    _permutations_of_cents(total_cents - 10, with_dimes, permutations)
+
+    with_quarters = Coins(pennies=coins.pennies, nickels=coins.nickels, dimes=coins.dimes, quarters=coins.quarters + 1)
+    _permutations_of_cents(total_cents - 25, with_quarters, permutations)

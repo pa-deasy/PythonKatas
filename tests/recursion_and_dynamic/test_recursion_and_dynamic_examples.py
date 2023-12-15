@@ -1,5 +1,6 @@
+import pytest
 from typing import Set
-from recursion_and_dynamic.recursion_and_dynamic_examples import RobotGrid, Tower, all_permutations, all_permutations_with_dups, all_subsets_of, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates, parens_permutations, recurse_multiply_efficient, recursive_multiply
+from recursion_and_dynamic.recursion_and_dynamic_examples import Canvas, Point, RobotGrid, Tower, all_permutations, all_permutations_with_dups, all_subsets_of, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates, parens_permutations, permutations_of_cents, recurse_multiply_efficient, recursive_multiply
 
 
 def test_fibonacci_when_calculated_then_result_is_as_expected():
@@ -126,3 +127,43 @@ def test_parens_permutations_when_generated_then_match_expected_list():
     actual = parens_permutations(3)
     
     assert actual == expected
+    
+    
+
+@pytest.fixture
+def blank_canvas():
+    return Canvas(size=5)
+
+
+@pytest.fixture
+def part_red_canvas():
+    canvas = Canvas(size=5)
+
+    canvas.layout[0][0] = '#FF0000'
+    canvas.layout[2][2] = '#FF0000'
+    canvas.layout[3][3] = '#FF0000'
+    canvas.layout[3][2] = '#FF0000'
+
+    return canvas
+
+
+def test_fill_with_color_when_blank_canvas_filled_with_green_then_all_canvas_is_green(blank_canvas):
+    blank_canvas.fill_with_color('008000', Point(1, 1))
+
+    assert blank_canvas.layout[0][0] == '008000'
+    assert blank_canvas.layout[4][4] == '008000'
+
+
+def test_fill_with_color_when_part_red_canvas_filled_with_green_then_select_parts_of_canvas_is_green(part_red_canvas):
+    part_red_canvas.fill_with_color('008000', Point(3, 2))
+
+    assert part_red_canvas.layout[0][0] == '#FF0000'
+    assert part_red_canvas.layout[2][2] == '008000'
+    assert part_red_canvas.layout[3][3] == '008000'
+    assert part_red_canvas.layout[3][2] == '008000'
+
+
+def test_permutations_of_cents_when_all_permutations_generated_then_match_expected_count():
+    permutations = permutations_of_cents(25)
+
+    assert len(permutations) == 13
