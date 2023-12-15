@@ -1,6 +1,6 @@
 import pytest
 from typing import Set
-from recursion_and_dynamic.recursion_and_dynamic_examples import Box, Canvas, Point, RobotGrid, Tower, all_permutations, all_permutations_with_dups, all_subsets_of, calculate_highest_stack, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates, parens_permutations, permutations_of_cents, permutations_of_queens, recurse_multiply_efficient, recursive_multiply
+from recursion_and_dynamic.recursion_and_dynamic_examples import Box, Canvas, Point, RobotGrid, Tower, all_permutations, all_permutations_with_dups, all_subsets_of, calculate_highest_stack, count_eval, count_ways, fibonacci, find_magic_index, find_magic_index_with_duplicates, parens_permutations, permutations_of_cents, permutations_of_queens, recurse_multiply_efficient, recursive_multiply
 
 
 def test_fibonacci_when_calculated_then_result_is_as_expected():
@@ -188,3 +188,7 @@ def test_calculate_highest_stack_when_calculated_then_returns_correct_height():
     
     assert height == 11
     
+    
+def test_count_eval():
+    assert count_eval('1^0|0|1', False) == 2
+    assert count_eval('0&0&0&1^1|0', True) == 10

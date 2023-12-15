@@ -262,7 +262,7 @@ def _get_char_counts(word: str) -> Dict[str, int]:
 
 # 8.9 - Parens: Implement an algorithm to print all valid (e.g. properly opened and closed) combinations of n pairs of parentheses.
 # Input 3 -> ((())), (()()), (())(), ()(()), ()()()
-def parens_permutations(parens_count: int, parens: List[str] = None) -> List[str]:
+def parens_permutations(parens_count: int) -> List[str]:
     parens: List[str] = []
     
     _add_paren(parens, parens_count, parens_count, '')
@@ -460,3 +460,45 @@ def _calculate_highest_stack(boxes: List[Box], bottom_index: int, stack_map: Lis
 
 def _can_be_above(top: Box, bottom: Box) -> bool:
     return top.width < bottom.width and top.height < bottom.height and top.dept < bottom.dept
+
+
+# 8.14 - Boolean Evaluation: Given a boolean expression consisting of the symbols:
+# 0(false), 1(true), &(AND), |(OR), ^(XOR)
+# and a desired boolean result value, implement a function to count the number of ways of parenthesizing the expression such that it evaluates to result.
+# The expression should be fully parenthesized (e.g. (0)^(1) but not extraneously (e.g. (((0)^(1))).
+# count_eval('1^0|0|1', False) -> 2
+# count_eval('0&0&0&1^1|0', True) -> 10
+def count_eval(symbols: str, result: bool) -> int:
+    if len(symbols) == 0:
+        return 0
+    if len(symbols) == 1:
+        return 1 if _symbol_to_boolean(symbols) == result else 0
+
+    ways = 0
+    for index in range(1, len(symbols), 2):
+        char = symbols[index]
+        left = symbols[:index]
+        right = symbols[index + 1:]
+
+        left_true = count_eval(left, True)
+        left_false = count_eval(left, False)
+        right_true = count_eval(right, True)
+        right_false = count_eval(right, False)
+        total = (left_true + left_false) * (right_true + right_false)
+
+        total_true = 0
+        if char == '^':
+            total_true = left_true * right_false + left_false * right_true
+        elif char == '&':
+            total_true = left_true * right_true
+        elif char == '|':
+            total_true == left_true * right_true + left_false * right_true + left_true * right_false
+
+        sub_ways = total_true if result else total - total_true
+        ways += sub_ways
+
+    return ways
+
+
+def _symbol_to_boolean(symbol: str) -> bool:
+    return symbol == '1'
