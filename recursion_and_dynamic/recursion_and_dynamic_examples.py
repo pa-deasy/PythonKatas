@@ -393,15 +393,15 @@ def permutations_of_queens() -> List[List[int]]:
     return permutations
     
     
-def _permutations_of_queens(row: int, columns: List[int], permuations: List[List[int]]) -> None:
+def _permutations_of_queens(row: int, columns: List[int], permutations: List[List[int]]) -> None:
     if row == GRID_SIZE:
-        permuations.append(list(columns))
+        permutations.append(list(columns))
         return
     
     for column in range(GRID_SIZE):
         if _check_is_valid(row, column, columns):
             columns[row] = column
-            _permutations_of_queens(row + 1, columns, permuations)
+            _permutations_of_queens(row + 1, columns, permutations)
         
         
 def _check_is_valid(row: int, column: int, columns: List[int]) -> bool:
