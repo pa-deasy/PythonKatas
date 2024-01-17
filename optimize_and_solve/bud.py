@@ -43,7 +43,7 @@ def a_cubed_plus_b_cuded_equals_c_cubed_plus_d_cubed_unnecessary(limit: int) -> 
     return matches
 
 
-# O(N^4)
+# O(N^2)
 def a_cubed_plus_b_cuded_equals_c_cubed_plus_d_cubed_duplicated(limit: int) -> list[EquationResult]:
     matches: list[EquationResult] = []
     cache: dict[int, list[Tuple[int, int]]] = {}
