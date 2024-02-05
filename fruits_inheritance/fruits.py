@@ -1,10 +1,8 @@
-from dataclasses import dataclass
-from typing import Protocol
-
-
-@dataclass
-class Fruit(Protocol):
+class Fruit():
     colour: str
+    
+    def __init__(self, colour: str) -> None:
+        self.colour = colour
     
     def pick(self) -> str:
         return f"Picked a {self.colour} fruit"
@@ -14,15 +12,11 @@ class Fruit(Protocol):
         return f"Peeled off a {self.colour} skin"
     
 
-@dataclass
 class Kiwi(Fruit):
     pass
     
     
-@dataclass
-class Apple():
-    colour: str
-    
+class Apple(Fruit):
     def pick(self) -> str:
         return f"Picked a shiny {self.colour} apple"
     
@@ -30,10 +24,7 @@ class Apple():
         return f"Peeled the shiny {self.colour} skin off an apple"
     
 
-@dataclass
-class Bananna():
-    colour: str
-    
+class Bananna(Fruit):
     def pick(self) -> str:
         return f"Picked a curvy {self.colour} bananna"
     

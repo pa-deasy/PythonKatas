@@ -5,17 +5,17 @@ from fruits import Apple, Bananna, Kiwi
 
 @pytest.fixture
 def sample_kiwi():
-    return Kiwi(colour="green")
+    return Kiwi("green")
 
 
 @pytest.fixture
 def sample_apple():
-    return Apple(colour="red")
+    return Apple("red")
 
 
 @pytest.fixture
 def sample_bananna():
-    return Bananna(colour="yellow")
+    return Bananna("yellow")
 
 
 def test_kiwi_when_created_then_expected(sample_kiwi):
