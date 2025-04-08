@@ -1,37 +1,34 @@
 from dataclasses import dataclass
-from datetime import datetime
-from typing import List, Protocol
+from typing import List
 
 
 # 7.11 - File System: Explain the data structures and algorithms that you would use to design an in-memory file system.
-class Entry(Protocol):
-    path: str
+@dataclass
+class Entry:
     name: str
-    updated_at: datetime
-    
-    def rename():
-        return
-    
-    def delete():
-        return
-    
-    def get_full_path():
-        return
+    parent: 'Directory'
 
 
+@dataclass
 class File(Entry):
-    content: str
     size: int
-    
 
+
+@dataclass
 class Directory(Entry):
-    contents: List[Entry]
-    
-    def number_of_files():
-        return
-    
-    def add():
-        return
-    
-    def remove():
-        return
+    entries: List[Entry]
+
+    def add_entries(self, entries: List[Entry]) -> None:
+        self.entries += entries
+
+    def number_of_files(self) -> int:
+        count = 0
+
+        for entry in self.entries:
+            if isinstance(entry, Directory):
+                count += 1
+                count += entry.number_of_files()
+            elif isinstance(entry, File):
+                count += 1
+
+        return count
