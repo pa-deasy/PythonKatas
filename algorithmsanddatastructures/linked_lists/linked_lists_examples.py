@@ -22,31 +22,30 @@ class LinkedList:
         
     # 2.1 - Remove Dups: Write code to remove duplicates from an unsorted linked list.
     # How would you solve the problem if a temporary buffer in not allowed?
-    def remove_dups(self) -> None:
-        values: Set[int] = set()
+    def remove_duplicates(self) -> None:
         current = self.head
+        if current is None:
+            return 
         
-        while current and current.next:
+        values = set()
+        while current.next:
             values.add(current.value)
-            next_value = current.next.value
-            
-            if next_value in values:
+            if current.next.value in values:
                 current.next = current.next.next
-                
-            current = current.next
+            else:
+                current = current.next
         
-    def remove_dups_in_place(self) -> None:
+    def remove_duplicates_in_place(self) -> None:
         current = self.head
-        
         while current:
             runner = current
             while runner and runner.next:
                 if runner.next.value == current.value:
                     runner.next = runner.next.next
-                
-                runner = runner.next
-                
-            current = current.next
+                else:
+                    runner = runner.next
+
+            current = current.nextd
         
     # 2.2 - Return Kth to Last: Implement and algorithm to find the kth to last element of a singly linked list.
     def kth_to_last(self, k: int) -> Node:
