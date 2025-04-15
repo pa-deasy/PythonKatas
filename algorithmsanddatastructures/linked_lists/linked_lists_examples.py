@@ -78,36 +78,29 @@ class LinkedList:
     # 3 5 8 5 10 2 1
     # 3 2 1 5 8 5 10
     def partition(self, value: int) -> None:
-        less_than = None
-        greater_than_equal = None
-        left_head = None
+        left = None
+        right = None
         right_head = None
-        current = self.head
-        
-        while current:
-            if current.value < value:
-                if not left_head:
-                    left_head = current
-                if not less_than:
-                    less_than = current
-                else:
-                    less_than.next = current
-                    less_than = less_than.next
+        node = self.head
+
+        while node:
+            if node.value < value:
+                if left:
+                    left.next = node
+                left = node
             else:
-                if not right_head:
-                    right_head = current
-                if not greater_than_equal:
-                    greater_than_equal = current
+                if right:
+                    right.next = node
                 else:
-                    greater_than_equal.next = current
-                    greater_than_equal = greater_than_equal.next
+                    right_head = node
+                right = node
+            node = node.next
         
-            current = current.next
-                    
-        if less_than:
-            less_than.next = right_head
-        
-        self.head = left_head if left_head else right_head
+        if left:
+            left.next = right_head
+            self.head = left
+        else:
+            self.head = right
         
     # 2.6 - Palindrome: Implement a function to check if a linked list is a palindrome
     def is_palindrome(self):
