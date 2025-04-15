@@ -50,18 +50,19 @@ class LinkedList:
     # 2.2 - Return Kth to Last: Implement and algorithm to find the kth to last element of a singly linked list.
     def kth_to_last(self, k: int) -> Node:
         right = self.head
-        right_position = 1
         
-        while right and right_position <= k:
+        right_position = 0
+
+        while right and right_position < k:
             right = right.next
-            right_position +=1
-            
-        left = self.head if right else None
-            
+            right_position += 1
+        
+        left = self.head if right_position == k else None
+
         while right:
-            left = left.next
             right = right.next
-        
+            left = left.next
+
         return left
     
     # 2.3 - Delete Middle Node: Implement and algorithm to delete a node in the middle(i.e. any node but the first and last node, not necessarily the exact middle),
