@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, List, Set
+from typing import Any, List, Set, Tuple
 
 
 @dataclass
@@ -230,6 +230,23 @@ class LinkedList:
     def add_all(self, other: 'LinkedList') -> None:
         cloned = other.clone()
         self.insert_last(cloned.head)
+
+    def length(self) -> int:
+        node = self.head
+        count = 0
+
+        while node:
+            count += 1
+            node = node.next
+
+        return count
+    
+    def pad(self, count: int) -> None:
+        while count > 0:
+            node = Node(value=0, next=self.head)
+            self.head = node
+            count -= 1
+    
         
 
 # 2.5 - Sum Lists: You have two numbers represented by a linked list, where each node contains a single digit.
@@ -259,6 +276,35 @@ def _sum(a: Node, b :Node, carryover: int) -> LinkedList:
     
     return result
     
+
+def reverse_sum(a: LinkedList, b: LinkedList) -> LinkedList:
+    a_length = a.length()
+    b_length = b.length()
+    shorter, longer = (a, b) if a_length < b_length else (b, a)
+    shorter.pad(abs(a_length - b_length))
+
+    node, remainder = _reverse_sum(shorter.head, longer.head)
+    if remainder > 0:
+        node = Node(value=remainder, next=node)
+
+    return LinkedList(head=node)
+
+def _reverse_sum(a: Node, b: Node) -> Tuple[Node, int]:
+    if a.next is None and b.next is None:
+        sum, remainder = _get_sum_and_remainder(a.value + b.value)
+        return Node(value=sum, next=None), remainder
+    
+    next_node, next_remainder = _reverse_sum(a.next, b.next)
+    sum, remainder = _get_sum_and_remainder(a.value + b.value + next_remainder)
+    return Node(value=sum, next=next_node), remainder
+
+def _get_sum_and_remainder(sum: int) -> Tuple[int, int]:
+    remainder = 0
+    if sum >= 10:
+        sum = sum % 10
+        remainder = 1
+
+    return sum, remainder
     
 # 2.7 - Intersection: Given two (singly) linked lists, determine if the two lists intersect. Return the intersecting node.
 # Note that the intersection is definded based on reference, not value. That is, if the kth node of the first linked list is the exact same node(by reference) as the jth node of the second list, then they are intersecting.
